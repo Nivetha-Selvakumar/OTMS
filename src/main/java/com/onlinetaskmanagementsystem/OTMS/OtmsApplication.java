@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class OtmsApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(OtmsApplication.class, args);
 	}
 

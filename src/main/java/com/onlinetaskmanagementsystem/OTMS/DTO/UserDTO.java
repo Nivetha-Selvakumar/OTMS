@@ -36,7 +36,7 @@ public class UserDTO {
     @Pattern(regexp = "^(.+)+@(.+)$", message = "Enter Your Appropriate email!")
     private String email;
     @NotBlank(message = "Enter your password")
-    @Size(min = 3,max = 20,message = "Your username must be in 3 to 20 characters")
+    @Size(min = 8,max = 20,message = "Your username must be in 8 to 20 characters")
     private String password;
 //    @NotNull
     private Timestamp registrationDate;

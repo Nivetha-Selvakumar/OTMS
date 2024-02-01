@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.OTMS.Controller;
 
 import com.onlinetaskmanagementsystem.OTMS.DTO.UserDTO;
+import com.onlinetaskmanagementsystem.OTMS.Exception.UserCreationException;
 import com.onlinetaskmanagementsystem.OTMS.Service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @PostMapping(path = "/signup")
-    public ResponseEntity<String> signupUser(@RequestBody @Valid UserDTO userDTO){
+    public ResponseEntity<String> signupUser(@RequestBody @Valid UserDTO userDTO) throws UserCreationException {
         Integer id= userService.addUser(userDTO);
         String responseMsg="Successfully Registered!\nYour UserId: "+id;
         return new ResponseEntity<>(responseMsg, HttpStatus.CREATED);
