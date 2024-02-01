@@ -21,6 +21,7 @@ public class UserImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    //check exist email If email exists return true and send error message
     public boolean checkExistEmail(String email) {
         boolean userFlag = false;
 
@@ -29,6 +30,16 @@ public class UserImpl implements UserService {
             userFlag = true;
         }
         return userFlag;
+    }
+
+    public boolean checkExistUser(String username) {
+        boolean usernameFlag = false;
+
+        String user = userRepo.checkUserName(username);
+        if (user != null) {
+            usernameFlag = true;
+        }
+        return usernameFlag;
     }
 
 
@@ -41,9 +52,15 @@ public class UserImpl implements UserService {
         UserEntity userEntity = UserMapper.userModelToEntity(userDTO);
         if (checkExistEmail(userDTO.getEmail())) {
             throw new UserCreationException("User already exist. Try with other email !");
-        } else {
+        }
+        else if(checkExistUser(userDTO.getUsername().trim())){
+            throw new UserCreationException("User already exist. Try with other username !");
+        }else {
             userEntity = userRepo.save(userEntity);
             return userEntity.getId();
         }
-    }
+
+
+        }
+
 }

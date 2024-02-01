@@ -12,4 +12,7 @@ public interface UserRepo extends JpaRepository<UserEntity,Integer> {
     @Query("select tbl_user.id from UserEntity tbl_user where tbl_user.email=:email")
     public Integer checkUser(String email);
 
+
+    @Query("select tbl_user.username from UserEntity tbl_user where tbl_user.username=:username")
+    public  String checkUserName(String username);
 }
