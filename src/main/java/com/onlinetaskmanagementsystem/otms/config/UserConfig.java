@@ -1,4 +1,4 @@
-package com.onlinetaskmanagementsystem.OTMS.Config;
+package com.onlinetaskmanagementsystem.otms.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

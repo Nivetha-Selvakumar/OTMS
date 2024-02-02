@@ -1,8 +1,8 @@
-package com.onlinetaskmanagementsystem.OTMS.Mapper;
+package com.onlinetaskmanagementsystem.otms.mapper;
 
-import com.onlinetaskmanagementsystem.OTMS.DTO.UserDTO;
-import com.onlinetaskmanagementsystem.OTMS.Entity.UserEntity;
-import com.onlinetaskmanagementsystem.OTMS.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
+import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
+import com.onlinetaskmanagementsystem.otms.Enum.Status;
 
 public class UserMapper {
     public static UserEntity userModelToEntity(UserDTO userDTO){

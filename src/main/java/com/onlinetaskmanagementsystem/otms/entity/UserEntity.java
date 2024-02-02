@@ -1,7 +1,7 @@
-package com.onlinetaskmanagementsystem.OTMS.Entity;
+package com.onlinetaskmanagementsystem.otms.entity;
 
 
-import com.onlinetaskmanagementsystem.OTMS.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -66,24 +66,4 @@ public class UserEntity {
     private Timestamp updatedDate;
 
 
-
-   /* @Override
-    public String toString() {
-        return "UserEntity{" +
-                "id=" + id +
-                ", orgId=" + orgId +
-                ", roleId=" + roleId +
-                ", empCode=" + empCode + '\'+
-                ", empName='" + empName + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", registrationDate=" + registrationDate +
-                ", userStatus='" + userStatus + '\'' +
-                ", createdBy=" + createdBy +
-                ", createdDate=" + createdDate +
-                ", updatedBy=" + updatedBy +
-                ", updatedDate=" + updatedDate +
-                '}';
-    }*/
 }
