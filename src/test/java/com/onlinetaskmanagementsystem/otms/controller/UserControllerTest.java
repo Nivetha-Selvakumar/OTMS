@@ -3,73 +3,43 @@ package com.onlinetaskmanagementsystem.otms.controller;
 
 import com.onlinetaskmanagementsystem.otms.DTO.SignInDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
-import com.onlinetaskmanagementsystem.otms.Exception.UserCreationException;
 import com.onlinetaskmanagementsystem.otms.service.UserService;
-import com.onlinetaskmanagementsystem.otms.service.impl.UserImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-//@ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class UserControllerTest {
     @InjectMocks
     UserController userController;
 
-    @Autowired
+    @Mock
     UserService userService;
 
-
     UserDTO userDTO;
-    @BeforeEach
-    public  void init(){
-        userService = new UserImpl();
-        UserDTO userDTO=new UserDTO();
-        userDTO.setEmail("n@gmail.com");
-        userDTO.setUserStatus(Status.ACTIVE);
-        userDTO.setUsername("Sample");
-        userDTO.setPassword("1234yyufytfy");
-        userDTO.setEmpCode("ATs123");
-        userDTO.setCreatedBy(1);
-        userDTO.setUpdatedBy(1);
-        userDTO.setOrgId(1);
-        userDTO.setRoleId(1);;
-        userDTO.setEmpName("nive");
-    }
+    SignInDTO signInDTO;
 
-//    @Test
-//    void signupUserTest() throws UserCreationException{
-//        when(userService.addUser(Mockito.any())).thenReturn(Mockito.anyInt());
-////        ResponseEntity<String> user = userController.signupUser(userDTO);
-////        assertEquals(HttpStatus.CREATED,user.getStatusCode());
-//    }
 
     @Test
-    void userSigninTest(){
-
-        SignInDTO signInDTO = new SignInDTO();
-        signInDTO.setEmail("n@gmail.com");
-        signInDTO.setPassword("nive");
-
-        try {
-            assertEquals("Signin successful", userService.signInUser(signInDTO));
-        } catch (CommonException e) {
-            throw new RuntimeException(e);
-        }
+    void signupUserTest() throws CommonException {
+        String s = "Successfully Registered!\nYour UserId: 1";
+        when(userService.addUser(userDTO)).thenReturn(1);
+        ResponseEntity<String> user = userController.signupUser(userDTO);
+        assertEquals(s, user.getBody());
     }
 
+    @Test
+    void userSigninTest() throws CommonException {
 
-
+        when(userService.signInUser(signInDTO)).thenReturn("Login successful");
+        String stringResponseEntity = userService.signInUser(signInDTO);
+        assertEquals("Login successful", stringResponseEntity);
+    }
 }

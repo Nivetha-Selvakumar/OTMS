@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.advice;
 
 
+import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserCreationException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserCredentialException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
@@ -51,5 +52,14 @@ public class ControllerAdvice {
         errObj.put("ERROR:",error.getMessage());
         return errObj;
     }
+
+    @ResponseStatus(HttpStatus.FOUND)
+    @ExceptionHandler(TaskCreationException.class)
+    public Map<String,String> taskCreationException(TaskCreationException error){
+        Map<String,String> errObj=new HashMap<>();
+        errObj.put("ERROR:",error.getMessage());
+        return errObj;
+    }
+
 
 }

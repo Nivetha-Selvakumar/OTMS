@@ -15,4 +15,5 @@ public interface UserService {
     Integer addUser(UserDTO userDTO) throws UserCreationException;
 
     String signInUser(SignInDTO signInDTO) throws CommonException;
+
 }

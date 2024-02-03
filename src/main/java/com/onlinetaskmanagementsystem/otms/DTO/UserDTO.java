@@ -43,5 +43,4 @@ public class UserDTO {
     private Timestamp createdDate;
     private Integer updatedBy;
     private Timestamp updatedDate;
-
 }

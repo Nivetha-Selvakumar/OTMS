@@ -3,9 +3,11 @@ package com.onlinetaskmanagementsystem.otms.mapper;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
-    public static UserEntity userModelToEntity(UserDTO userDTO){
+    public UserEntity userModelToEntity(UserDTO userDTO){
         UserEntity userEntity = new UserEntity();
         userEntity.setOrgId(userDTO.getOrgId());
         userEntity.setRoleId(userDTO.getRoleId());

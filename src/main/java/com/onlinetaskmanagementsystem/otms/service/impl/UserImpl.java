@@ -26,11 +26,12 @@ public class UserImpl implements UserService {
     @Autowired
     Validation validation;
 
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public Integer addUser(UserDTO userDTO) throws UserCreationException{
-
-        UserEntity userEntity = UserMapper.userModelToEntity(userDTO);
+        UserEntity userEntity = userMapper.userModelToEntity(userDTO);
         if (validation.checkExistEmail(userDTO.getEmail())) {
             throw new UserCreationException("User already exist. Try with other email !");
         }
@@ -52,5 +53,6 @@ public class UserImpl implements UserService {
         }
         return null;
     }
+
 
 }
