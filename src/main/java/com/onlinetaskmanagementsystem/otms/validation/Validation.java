@@ -1,16 +1,15 @@
 package com.onlinetaskmanagementsystem.otms.validation;
 
-import com.onlinetaskmanagementsystem.otms.DTO.SignInDTO;
-import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
-import com.onlinetaskmanagementsystem.otms.Exception.UserCredentialException;
+import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class Validation {
@@ -42,19 +41,6 @@ public class Validation {
         return usernameFlag;
     }
 
-    public boolean signinValidation(@NotNull SignInDTO signInDTO) throws CommonException {
-
-        if (checkExistEmail(signInDTO.getEmail())) {
-            UserEntity userEntity = userRepo.getUserRecord(signInDTO.getEmail());
-            if (userEntity.getPassword().equals(signInDTO.getPassword())) {
-                return true;
-            } else {
-                throw new UserCredentialException("Password Mismatched");
-            }
-        } else {
-            throw new UserNotFoundException("Given email not exists");
-        }
-    }
 
     public boolean taskTitleValidation(String taskTitle) {
         boolean taskFlag1 = false;
@@ -73,5 +59,14 @@ public class Validation {
             taskFlag2 = true;
         }
         return taskFlag2;
+    }
+
+
+    public void taskViewValidation(Integer userId) throws UserNotFoundException {
+        if(userId != null){
+           Optional<UserEntity> userEntity = userRepo.findByIdAndUserStatus(userId, Status.ACTIVE);
+           if(userEntity.isEmpty())
+            throw new UserNotFoundException("This user is not found");
+        }
     }
 }

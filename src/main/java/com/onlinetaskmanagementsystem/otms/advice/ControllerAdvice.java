@@ -1,10 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.advice;
 
 
-import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
-import com.onlinetaskmanagementsystem.otms.Exception.UserCreationException;
-import com.onlinetaskmanagementsystem.otms.Exception.UserCredentialException;
-import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
+import com.onlinetaskmanagementsystem.otms.Exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +30,7 @@ public class ControllerAdvice {
     @ExceptionHandler(UserCreationException.class)
     public Map<String,String> userCreationException(UserCreationException error){
         Map<String,String> errObj=new HashMap<>();
-        errObj.put("ERROR:",error.getMessage());
+        errObj.put("ERROR",error.getMessage());
         return errObj;
     }
 
@@ -42,14 +39,14 @@ public class ControllerAdvice {
     @ExceptionHandler(UserCredentialException.class)
     public Map<String,String> userCredentialException(UserCredentialException error){
         Map<String,String> errObj=new HashMap<>();
-        errObj.put("ERROR:",error.getMessage());
+        errObj.put("ERROR",error.getMessage());
         return errObj;
     }
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public Map<String,String> userNotFoundException(UserNotFoundException error){
         Map<String,String> errObj=new HashMap<>();
-        errObj.put("ERROR:",error.getMessage());
+        errObj.put("ERROR",error.getMessage());
         return errObj;
     }
 
@@ -57,9 +54,10 @@ public class ControllerAdvice {
     @ExceptionHandler(TaskCreationException.class)
     public Map<String,String> taskCreationException(TaskCreationException error){
         Map<String,String> errObj=new HashMap<>();
-        errObj.put("ERROR:",error.getMessage());
+        errObj.put("ERROR",error.getMessage());
         return errObj;
     }
+
 
 
 }

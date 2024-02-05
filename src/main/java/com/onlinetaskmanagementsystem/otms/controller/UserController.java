@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.controller;
 
 import com.onlinetaskmanagementsystem.otms.DTO.SignInDTO;
+import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.service.UserService;
@@ -20,14 +21,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(path = "/signup")
-    public ResponseEntity<String> signupUser(@RequestBody @Valid UserDTO userDTO) throws CommonException {
-        Integer id= userService.addUser(userDTO);
-        String responseMsg="Successfully Registered!\nYour UserId: "+id;
-        return new ResponseEntity<>(responseMsg, HttpStatus.CREATED);
+    public ResponseEntity<SignUpResponse> signupUser(@RequestBody @Valid UserDTO userDTO) throws CommonException {
+        return new ResponseEntity<>(userService.addUser(userDTO), HttpStatus.CREATED);
     }
 
     @PostMapping(path="/signin")
-    public ResponseEntity<String> signinUser(@RequestBody @Valid SignInDTO signInDTO) throws CommonException{
-        return new ResponseEntity<>(userService.signInUser(signInDTO), HttpStatus.ACCEPTED);
+    public ResponseEntity<UserDTO> signinUser(@RequestBody @Valid SignInDTO signInDTO) throws CommonException{
+        return new ResponseEntity<>(userService.signInUser(signInDTO), HttpStatus.OK);
     }
 }

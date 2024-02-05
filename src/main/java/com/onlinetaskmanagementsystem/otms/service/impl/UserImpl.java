@@ -2,8 +2,11 @@ package com.onlinetaskmanagementsystem.otms.service.impl;
 
 
 import com.onlinetaskmanagementsystem.otms.DTO.SignInDTO;
+import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
+import com.onlinetaskmanagementsystem.otms.Exception.UserCredentialException;
+import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.Exception.UserCreationException;
 import com.onlinetaskmanagementsystem.otms.mapper.UserMapper;
@@ -30,7 +33,7 @@ public class UserImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public Integer addUser(UserDTO userDTO) throws UserCreationException{
+    public SignUpResponse addUser(UserDTO userDTO) throws UserCreationException{
         UserEntity userEntity = userMapper.userModelToEntity(userDTO);
         if (validation.checkExistEmail(userDTO.getEmail())) {
             throw new UserCreationException("User already exist. Try with other email !");
@@ -38,21 +41,24 @@ public class UserImpl implements UserService {
         else if(validation.checkExistUser(userDTO.getUsername().trim())){
             throw new UserCreationException("User already exist. Try with other username !");
         }else {
-            userEntity = userRepo.save(userEntity);
-            return userEntity.getId();
+            return userMapper.mapToSignUpModel(userRepo.save(userEntity));
         }
 
     }
 
     @Override
-    public String signInUser(SignInDTO signInDTO) throws CommonException {
+    public UserDTO signInUser(SignInDTO signInDTO) throws CommonException {
 
 //        Verifying the user credentials to signin
-        if(validation.signinValidation(signInDTO)){
-            return "Login successful";
-        }
-        return null;
+            if (validation.checkExistEmail(signInDTO.getEmail())) {
+                UserEntity userEntity = userRepo.getUserRecord(signInDTO.getEmail());
+                if (userEntity.getPassword().equals(signInDTO.getPassword())) {
+                     return userMapper.userEntityToModel(userEntity);
+                } else {
+                    throw new UserCredentialException("Password Mismatched");
+                }
+            } else {
+                throw new UserNotFoundException("Given email not exists");
+            }
     }
-
-
 }

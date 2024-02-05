@@ -29,4 +29,26 @@ public class TaskMapper {
         return taskEntity;
 
     }
+
+    public TaskDTO taskEntityToModel(TaskEntity taskEntity) {
+        TaskDTO taskDTO=new TaskDTO();
+        taskDTO.setUserId(taskEntity.getUserId());
+        taskDTO.setTaskTitle(taskEntity.getTaskTitle());
+        taskDTO.setTaskDesc(taskEntity.getTaskDesc());
+        taskDTO.setPriority(taskEntity.getPriority());
+        taskDTO.setTaskStatus(taskEntity.getTaskStatus());
+        taskDTO.setPlannedStartDate(taskEntity.getPlannedStartDate());
+        taskDTO.setPlannedCompletionDate(taskEntity.getPlannedCompletionDate());
+        taskDTO.setActualStartDate(taskEntity.getActualStartDate());
+        taskDTO.setActualCompletionDate(taskEntity.getActualCompletionDate());
+        taskDTO.setActiveStatus(taskEntity.getActiveStatus());
+        taskDTO.setAssigneeId(taskEntity.getAssigneeId());
+        taskDTO.setAssignerId(taskEntity.getAssignerId());
+        taskDTO.setCreatedBy(taskEntity.getAssignerId());
+        taskDTO.setUpdatedBy(taskEntity.getUpdatedBy());
+        taskDTO.setCreatedDate(taskEntity.getCreatedDate());
+        taskDTO.setUpdatedDate(taskEntity.getUpdatedDate());
+
+        return taskDTO;
+    }
 }
