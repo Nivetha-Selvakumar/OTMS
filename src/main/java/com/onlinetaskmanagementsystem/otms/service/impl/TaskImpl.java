@@ -1,10 +1,16 @@
 package com.onlinetaskmanagementsystem.otms.service.impl;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
+import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
+import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
+import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
+import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
+import com.onlinetaskmanagementsystem.otms.mapper.TaskHistoryMapper;
 import com.onlinetaskmanagementsystem.otms.mapper.TaskMapper;
+import com.onlinetaskmanagementsystem.otms.repository.TaskHistoryRepo;
 import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
 import com.onlinetaskmanagementsystem.otms.service.Taskservice;
 import com.onlinetaskmanagementsystem.otms.validation.Validation;
@@ -25,6 +31,9 @@ public class TaskImpl implements Taskservice {
     @Autowired
     TaskRepo taskRepo;
 
+    @Autowired
+    TaskHistoryMapper taskHistoryMapper;
+
 
     @Override
     public Integer addTask(TaskDTO taskDTO) throws CommonException {
@@ -33,10 +42,10 @@ public class TaskImpl implements Taskservice {
             throw new TaskCreationException("This task is already present for this user");
         }else{
             taskEntity=taskRepo.save(taskEntity);
+//            TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity();
             return taskEntity.getId();
         }
     }
-
     @Override
     public List<TaskDTO> viewList(Integer userId) throws CommonException{
 
@@ -48,4 +57,24 @@ public class TaskImpl implements Taskservice {
             }
             return taskDTOList;
     }
+
+    @Override
+    public TaskDTO viewUpdatedList(Integer taskId, TaskDTO taskDTO) throws CommonException {
+        TaskEntity taskEntity = validation.taskExistValidation(taskId);
+        taskEntity=taskRepo.save(taskMapper.taskUpdateModelToEntity(taskDTO,taskEntity));
+
+        return taskMapper.taskEntityToModel(taskEntity);
+    }
+
+    @Override
+    public String deleteTask(Integer taskId, Integer userId) throws TaskNotFoundException {
+        if(validation.taskUserValidation(userId)){
+            TaskEntity taskEntity = validation.taskExistValidationByUserIdAndTaskId(userId,taskId);
+            taskEntity.setActiveStatus(Status.INACTIVE);
+            taskRepo.save(taskEntity);
+            return "Successfully INACTIVE!";
+       }
+        return "No Active task is for particular User";
+    }
+
 }

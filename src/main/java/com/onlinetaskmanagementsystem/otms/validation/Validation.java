@@ -1,11 +1,13 @@
 package com.onlinetaskmanagementsystem.otms.validation;
 
 import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -69,4 +71,29 @@ public class Validation {
             throw new UserNotFoundException("This user is not found");
         }
     }
+
+    public TaskEntity taskExistValidation(Integer taskId) throws TaskNotFoundException {
+        if(taskId != null){
+            Optional<TaskEntity> taskEntity = taskRepo.findByIdAndActiveStatus(taskId, Status.ACTIVE);
+            if(taskEntity.isEmpty()){
+                throw new TaskNotFoundException("The task is not found");
+            }else{
+                return taskEntity.get();
+            }
+        }
+        return null;
+    }
+
+    public TaskEntity taskExistValidationByUserIdAndTaskId(Integer taskId, Integer userId) throws TaskNotFoundException {
+        if(taskId != null){
+            Optional<TaskEntity> taskEntity = taskRepo.findByUserIdAndIdAndActiveStatus(userId,taskId, Status.ACTIVE);
+            if(taskEntity.isEmpty()){
+                throw new TaskNotFoundException("The task is not found");
+            }else{
+                return taskEntity.get();
+            }
+        }
+        return null;
+    }
+
 }

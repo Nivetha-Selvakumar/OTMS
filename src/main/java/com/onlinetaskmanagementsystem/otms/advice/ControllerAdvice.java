@@ -58,6 +58,14 @@ public class ControllerAdvice {
         return errObj;
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(TaskNotFoundException.class)
+    public Map<String,String> taskNotFoundException(TaskNotFoundException error){
+        Map<String,String> errObj=new HashMap<>();
+        errObj.put("ERROR",error.getMessage());
+        return errObj;
+    }
+
 
 
 }

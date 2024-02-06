@@ -23,7 +23,7 @@ public class TaskDTO {
     private String taskDesc;
     @NotBlank(message = "Enter task Priority as High,Medium,Low")
     private String priority;
-    @NotBlank(message = "Enter task Task status")
+    @NotBlank(message = "Enter the Task status")
     private String taskStatus;
     @NotNull(message = "Enter the Planned start date")
  //   @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",message = "Invalid timestamp format. Use the format: yyyy-MM-ddTHH:mm:ss")
