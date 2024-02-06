@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface TaskRepo extends JpaRepository<TaskEntity,Integer> {
 
 
-    TaskEntity findByUserId(Integer userId);
+    List<TaskEntity> findByUserId(Integer userId);
 
     TaskEntity findByTaskTitle(String taskTitle);
 

@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.mapper;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
+import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import org.springframework.stereotype.Component;
@@ -52,22 +53,21 @@ public class TaskMapper {
         return taskDTO;
     }
 
-    public TaskEntity taskUpdateModelToEntity(TaskDTO taskDTO, TaskEntity taskEntity) {
-        taskEntity.setUserId(taskDTO.getUserId());
-        taskEntity.setTaskTitle(taskDTO.getTaskTitle());
-        taskEntity.setTaskDesc(taskDTO.getTaskDesc());
-        taskEntity.setPriority(taskDTO.getPriority());
-        taskEntity.setTaskStatus(taskDTO.getTaskStatus());
-        taskEntity.setPlannedStartDate(taskDTO.getPlannedStartDate());
-        taskEntity.setPlannedCompletionDate(taskDTO.getPlannedCompletionDate());
-        taskEntity.setActualStartDate(taskDTO.getActualStartDate());
-        taskEntity.setActualCompletionDate(taskDTO.getActualCompletionDate());
-        taskEntity.setActiveStatus(taskDTO.getActiveStatus()!=null?taskDTO.getActiveStatus():taskEntity.getActiveStatus());
-        taskEntity.setAssigneeId(taskDTO.getAssigneeId());
-        taskEntity.setAssignerId(taskDTO.getAssignerId());
-        taskEntity.setCreatedBy(taskDTO.getAssignerId());
-        taskEntity.setUpdatedBy(taskDTO.getUpdatedBy());
-        taskEntity.setUpdatedDate(taskDTO.getUpdatedDate());
+    public TaskEntity taskUpdateModelToEntity(TaskUpdateDTO taskUpdateDTODTO, TaskEntity taskEntity) {
+        taskEntity.setUserId(taskUpdateDTODTO.getUserId());
+        taskEntity.setTaskTitle(taskUpdateDTODTO.getTaskTitle());
+        taskEntity.setTaskDesc(taskUpdateDTODTO.getTaskDesc());
+        taskEntity.setPriority(taskUpdateDTODTO.getPriority());
+        taskEntity.setTaskStatus(taskUpdateDTODTO.getTaskStatus());
+        taskEntity.setPlannedStartDate(taskUpdateDTODTO.getPlannedStartDate());
+        taskEntity.setPlannedCompletionDate(taskUpdateDTODTO.getPlannedCompletionDate());
+        taskEntity.setActualStartDate(taskUpdateDTODTO.getActualStartDate());
+        taskEntity.setActualCompletionDate(taskUpdateDTODTO.getActualCompletionDate());
+        taskEntity.setActiveStatus(taskUpdateDTODTO.getActiveStatus()!=null?taskUpdateDTODTO.getActiveStatus():taskEntity.getActiveStatus());
+        taskEntity.setAssigneeId(taskUpdateDTODTO.getAssigneeId());
+        taskEntity.setAssignerId(taskUpdateDTODTO.getAssignerId());
+        taskEntity.setCreatedBy(taskUpdateDTODTO.getAssignerId());
+        taskEntity.setUpdatedBy(taskUpdateDTODTO.getUpdatedBy());
 
         return  taskEntity;
     }

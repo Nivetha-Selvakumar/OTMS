@@ -18,7 +18,7 @@ public class TaskHistoryDTO {
     private Integer taskId;
 
     @NotBlank(message = "Enter Task update description")
-    private String desc;
+    private String description;
 
     @NotNull(message = "Enter Created by User Id")
     private Integer createdBy;

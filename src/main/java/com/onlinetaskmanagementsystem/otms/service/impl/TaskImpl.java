@@ -2,6 +2,7 @@ package com.onlinetaskmanagementsystem.otms.service.impl;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
+import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class TaskImpl implements Taskservice {
@@ -34,6 +36,8 @@ public class TaskImpl implements Taskservice {
     @Autowired
     TaskHistoryMapper taskHistoryMapper;
 
+    @Autowired
+    TaskHistoryRepo taskHistoryRepo;
 
     @Override
     public Integer addTask(TaskDTO taskDTO) throws CommonException {
@@ -42,13 +46,13 @@ public class TaskImpl implements Taskservice {
             throw new TaskCreationException("This task is already present for this user");
         }else{
             taskEntity=taskRepo.save(taskEntity);
-//            TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity();
+            TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, "Created");
+            taskHistoryRepo.save(taskHistoryEntity);
             return taskEntity.getId();
         }
     }
     @Override
     public List<TaskDTO> viewList(Integer userId) throws CommonException{
-
         validation.taskViewValidation(userId);
         List<TaskEntity> taskEntities= taskRepo.findAllByUserId(userId);
         List<TaskDTO> taskDTOList = new ArrayList<>();
@@ -59,22 +63,25 @@ public class TaskImpl implements Taskservice {
     }
 
     @Override
-    public TaskDTO viewUpdatedList(Integer taskId, TaskDTO taskDTO) throws CommonException {
+    public TaskDTO viewUpdatedTask(Integer taskId, TaskUpdateDTO taskUpdateDTO) throws CommonException {
         TaskEntity taskEntity = validation.taskExistValidation(taskId);
-        taskEntity=taskRepo.save(taskMapper.taskUpdateModelToEntity(taskDTO,taskEntity));
-
+        taskEntity=taskRepo.save(taskMapper.taskUpdateModelToEntity(taskUpdateDTO,taskEntity));
+        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, taskUpdateDTO.getUpdatedField());
+        taskHistoryRepo.save(taskHistoryEntity);
         return taskMapper.taskEntityToModel(taskEntity);
     }
 
     @Override
     public String deleteTask(Integer taskId, Integer userId) throws TaskNotFoundException {
         if(validation.taskUserValidation(userId)){
-            TaskEntity taskEntity = validation.taskExistValidationByUserIdAndTaskId(userId,taskId);
+            TaskEntity taskEntity = validation.taskExistValidationByUserIdAndTaskId(taskId, userId);
             taskEntity.setActiveStatus(Status.INACTIVE);
             taskRepo.save(taskEntity);
             return "Successfully INACTIVE!";
        }
         return "No Active task is for particular User";
     }
+
+
 
 }

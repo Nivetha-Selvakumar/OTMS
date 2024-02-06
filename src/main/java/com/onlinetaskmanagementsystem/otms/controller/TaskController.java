@@ -1,8 +1,11 @@
 package com.onlinetaskmanagementsystem.otms.controller;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
+import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
+import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
+import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.service.Taskservice;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.Valid;
@@ -33,8 +36,8 @@ public class TaskController {
     }
 
     @PutMapping(path="/update/{taskId}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable("taskId") Integer taskId, @RequestBody @Valid TaskDTO taskDTO) throws  CommonException{
-        return new ResponseEntity<>(taskService.viewUpdatedList(taskId, taskDTO),HttpStatus.OK);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable("taskId") Integer taskId, @RequestBody @Valid TaskUpdateDTO taskUpdateDTO) throws  CommonException{
+        return new ResponseEntity<>(taskService.viewUpdatedTask(taskId, taskUpdateDTO),HttpStatus.OK);
     }
 
     @DeleteMapping(path="/delete/{taskId}")
@@ -42,9 +45,10 @@ public class TaskController {
         return  new ResponseEntity<>(taskService.deleteTask(taskId,userId),HttpStatus.OK);
     }
 
-    @PostMapping(path = "")
-    @GetMapping(path="/history/{taskId}")
-    public ResponseEntity<String> historyTask(@PathVariable String taskId){
-        return  ResponseEntity.ok("Success" + taskId);
-    }
+//
+//    @GetMapping(path="/history/{taskId}")
+//    public ResponseEntity<List<TaskHistoryEntity>> historyTask(@PathVariable Integer taskId) throws CommonException{
+//        List<TaskHistoryDTO> taskHistories = taskService.viewHistoryTask(taskId);
+//        return ResponseEntity.ok(taskHistories);
+//    }
 }

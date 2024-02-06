@@ -27,8 +27,8 @@ public class TaskHistoryEntity {
     @Column(name = "created_by", nullable = false)
     private Integer createdBy;
 
-    @Column(name="desc", nullable = false, length =1000)
-    private String desc;
+    @Column(name="description", nullable = false, length =1000)
+    private String description;
 
     @Column(name = "created_date", nullable = false)
     @CreationTimestamp
