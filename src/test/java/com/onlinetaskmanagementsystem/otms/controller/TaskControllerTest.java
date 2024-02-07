@@ -3,13 +3,16 @@ package com.onlinetaskmanagementsystem.otms.controller;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
+import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.service.TaskService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +44,26 @@ class TaskControllerTest {
         assertEquals(taskDTOList,response);
     }
 
+    @Test
+    void createTaskTest() throws CommonException{
+        when(taskService.addTask(taskDTO)).thenReturn(1);
+        ResponseEntity<String> response= taskController.createTask(taskDTO);
+        assertEquals("Successfully Registered!\nYour TaskId: 1",response.getBody());
+    }
+
+    @Test
+    void updateTaskTest() throws CommonException{
+        when(taskService.viewUpdatedTask(taskHistoryDTO.getTaskId(), new TaskUpdateDTO())).thenReturn(taskDTO);
+        TaskDTO response= taskController.updateTask(taskHistoryDTO.getTaskId(),new TaskUpdateDTO()).getBody();
+        assertEquals(taskDTO,response);
+    }
+
+    @Test
+    void deleteTaskTest() throws CommonException{
+        when(taskService.deleteTask(taskHistoryDTO.getTaskId(),taskDTO.getUserId())).thenReturn("Successfully Inactive!");
+        String response = taskController.deleteTask(taskHistoryDTO.getTaskId(),taskDTO.getUserId()).getBody();
+        Assertions.assertEquals("Successfully Inactive!", response);
+    }
 
     @Test
     void taskHistoryTest() throws CommonException {
