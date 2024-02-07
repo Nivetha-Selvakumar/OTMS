@@ -14,7 +14,7 @@ import com.onlinetaskmanagementsystem.otms.mapper.TaskHistoryMapper;
 import com.onlinetaskmanagementsystem.otms.mapper.TaskMapper;
 import com.onlinetaskmanagementsystem.otms.repository.TaskHistoryRepo;
 import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
-import com.onlinetaskmanagementsystem.otms.service.Taskservice;
+import com.onlinetaskmanagementsystem.otms.service.TaskService;
 import com.onlinetaskmanagementsystem.otms.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class TaskImpl implements Taskservice {
+public class TaskImpl implements TaskService {
     @Autowired
     TaskMapper taskMapper;
 
@@ -77,7 +77,7 @@ public class TaskImpl implements Taskservice {
             TaskEntity taskEntity = validation.taskExistValidationByUserIdAndTaskId(taskId, userId);
             taskEntity.setActiveStatus(Status.INACTIVE);
             taskRepo.save(taskEntity);
-            return "Successfully INACTIVE!";
+            return "Successfully Inactive!";
        }
         return "No Active task is for particular User";
     }
@@ -85,7 +85,7 @@ public class TaskImpl implements Taskservice {
     @Override
     public List<TaskHistoryDTO> viewHistoryTask(Integer taskId,Integer userId) throws CommonException {
         List<TaskHistoryDTO> taskHistoryDTOList = new ArrayList<>();
-        if(validation.taskHistoryUserValidation(userId)){
+        if (validation.taskHistoryUserValidation(userId)) {
             if (validation.taskHistoryValidation(taskId)) {
                 List<TaskHistoryEntity> taskHistoryEntities = taskHistoryRepo.findAllByTaskId(taskId);
                 for (TaskHistoryEntity taskHistoryEntity : taskHistoryEntities) {

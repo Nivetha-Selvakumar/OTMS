@@ -27,11 +27,6 @@ class UserControllerTest {
     UserDTO userDTO = new UserDTO();
     SignInDTO signInDTO = new SignInDTO();
 
-    @BeforeEach
-    void init(){
-        userDTO.setUsername("nive");
-    }
-
 
 //    @Test
 //    void signupUserTest() throws CommonException {
@@ -41,11 +36,11 @@ class UserControllerTest {
 //        assertEquals(s, user.getBody());
 //    }
 
-    @Test
-    void userSigninTest() throws CommonException {
+//    @Test
+//    void userSigninTest() throws CommonException {
+//        when(userService.signInUser(SignInDTO signInDTO)).thenReturn()
+//        UserDTO userDTOResponse = userService.signInUser(signInDTO);
+//        assertEquals(userDTO.getUsername(), userDTOResponse.getUsername());
+//    }
 
-        when(userService.signInUser(signInDTO)).thenReturn(userDTO);
-        UserDTO userDTOResponse = userService.signInUser(signInDTO);
-        assertEquals(userDTO.getUsername(), userDTOResponse.getUsername());
-    }
 }

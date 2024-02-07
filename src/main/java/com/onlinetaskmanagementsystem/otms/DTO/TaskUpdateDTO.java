@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.stereotype.Component;
+
 import java.sql.Timestamp;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor

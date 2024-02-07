@@ -7,7 +7,7 @@ import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 
 import java.util.List;
 
-public interface Taskservice {
+public interface TaskService {
     Integer addTask(TaskDTO taskDTO) throws CommonException;
 
     List<TaskDTO> viewList(Integer id) throws CommonException;

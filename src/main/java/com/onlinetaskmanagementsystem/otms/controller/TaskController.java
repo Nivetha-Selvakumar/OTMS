@@ -4,7 +4,7 @@ import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
-import com.onlinetaskmanagementsystem.otms.service.Taskservice;
+import com.onlinetaskmanagementsystem.otms.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/task")
 public class TaskController {
     @Autowired
-    private Taskservice taskService;
+    private TaskService taskService;
 
     @GetMapping(path="/list")
     public ResponseEntity<List<TaskDTO>> listTask(@RequestParam Integer userId) throws CommonException{
