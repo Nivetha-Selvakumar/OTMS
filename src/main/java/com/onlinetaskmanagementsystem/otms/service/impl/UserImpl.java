@@ -13,6 +13,7 @@ import com.onlinetaskmanagementsystem.otms.mapper.UserMapper;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
 import com.onlinetaskmanagementsystem.otms.service.UserService;
 import com.onlinetaskmanagementsystem.otms.validation.Validation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public UserDTO signInUser(SignInDTO signInDTO) throws CommonException {
+    public UserDTO signInUser(@Valid SignInDTO signInDTO) throws CommonException {
 
 //        Verifying the user credentials to signin
             if (validation.checkExistEmail(signInDTO.getEmail())) {

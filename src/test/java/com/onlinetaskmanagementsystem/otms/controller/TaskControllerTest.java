@@ -5,7 +5,6 @@ import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.service.TaskService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,6 +31,16 @@ class TaskControllerTest {
 
     TaskDTO taskDTO = new TaskDTO();
 
+    @Test
+    void  listTaskTest() throws  CommonException{
+        TaskDTO taskDTO1=new TaskDTO();
+        TaskDTO taskDTO2 = new TaskDTO();
+        List<TaskDTO> taskDTOList = Arrays.asList(taskDTO1,taskDTO2);
+        when(taskService.viewList(taskDTO.getUserId())).thenReturn(taskDTOList);
+        List<TaskDTO> response = taskController.listTask(taskDTO.getUserId()).getBody();
+        assertEquals(taskDTOList,response);
+    }
+
 
     @Test
     void taskHistoryTest() throws CommonException {
@@ -43,5 +52,6 @@ class TaskControllerTest {
         assertEquals(taskHistoryDTOList,responseEntity);
 
     }
+
 
 }

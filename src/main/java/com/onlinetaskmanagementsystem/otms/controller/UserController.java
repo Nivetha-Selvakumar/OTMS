@@ -1,9 +1,9 @@
 package com.onlinetaskmanagementsystem.otms.controller;
 
 import com.onlinetaskmanagementsystem.otms.DTO.SignInDTO;
-import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
+import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
