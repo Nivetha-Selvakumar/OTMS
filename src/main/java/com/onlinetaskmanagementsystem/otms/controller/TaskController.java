@@ -4,10 +4,7 @@ import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
-import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
-import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.service.Taskservice;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,10 +42,10 @@ public class TaskController {
         return  new ResponseEntity<>(taskService.deleteTask(taskId,userId),HttpStatus.OK);
     }
 
-//
-//    @GetMapping(path="/history/{taskId}")
-//    public ResponseEntity<List<TaskHistoryEntity>> historyTask(@PathVariable Integer taskId) throws CommonException{
-//        List<TaskHistoryDTO> taskHistories = taskService.viewHistoryTask(taskId);
-//        return ResponseEntity.ok(taskHistories);
-//    }
+
+    @GetMapping(path="/history/{taskId}")
+    public ResponseEntity<List<TaskHistoryDTO>> historyTask(@PathVariable Integer taskId) throws CommonException{
+        return new ResponseEntity<>(taskService.viewHistoryTask(taskId),HttpStatus.OK);
+
+    }
 }

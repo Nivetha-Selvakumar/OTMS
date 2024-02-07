@@ -16,13 +16,13 @@ public class TaskHistoryMapper {
         return taskHistoryEntity;
     }
 
-//    public TaskHistoryDTO taskHistoryEntityToModel(TaskHistoryEntity taskHistoryEntity){
-//        TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
-//        taskHistoryDTO.setTaskId(taskHistoryEntity.getTaskId());
-//        taskHistoryDTO.setDescription(taskHistoryEntity.getDescription());
-//        taskHistoryDTO.setCreatedBy(taskHistoryEntity.getCreatedBy());
-//        taskHistoryDTO.setCreatedDate(taskHistoryEntity.getCreatedDate());
-//
-//        return  taskHistoryDTO;
-//    }
+    public TaskHistoryDTO taskHistoryEntityToModel(TaskHistoryEntity taskHistoryEntity){
+        TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+        taskHistoryDTO.setTaskId(taskHistoryEntity.getTaskId());
+        taskHistoryDTO.setDescription(taskHistoryEntity.getDescription());
+        taskHistoryDTO.setCreatedBy(taskHistoryEntity.getCreatedBy());
+        taskHistoryDTO.setCreatedDate(taskHistoryEntity.getCreatedDate());
+
+        return  taskHistoryDTO;
+    }
 }

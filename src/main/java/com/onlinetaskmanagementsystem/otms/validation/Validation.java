@@ -102,4 +102,14 @@ public class Validation {
         return null;
     }
 
+    public boolean taskHistoryValidation(Integer taskId) {
+        boolean taskHistoryFlag = false;
+        if(taskId != null){
+            List<TaskHistoryEntity> taskHistoryEntity = taskHistoryRepo.findByTaskId(taskId);
+            if (!taskHistoryEntity.isEmpty() && taskHistoryEntity.get(0).getTaskId().equals(taskId)) {
+                taskHistoryFlag = true;
+            }
+        }
+        return taskHistoryFlag;
+    }
 }

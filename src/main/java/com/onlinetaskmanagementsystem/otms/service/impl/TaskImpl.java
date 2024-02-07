@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.service.impl;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
+import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
@@ -80,6 +81,19 @@ public class TaskImpl implements Taskservice {
         return "No Active task is for particular User";
     }
 
-
-
+    @Override
+    public List<TaskHistoryDTO> viewHistoryTask(Integer taskId) throws CommonException {
+        List<TaskHistoryDTO> taskHistoryDTOList = null;
+        if (validation.taskHistoryValidation(taskId)) {
+            List<TaskHistoryEntity> taskHistoryEntities = taskHistoryRepo.findAllByTaskId(taskId);
+            taskHistoryDTOList = new ArrayList<>();
+            for (TaskHistoryEntity taskHistoryEntity : taskHistoryEntities) {
+                taskHistoryDTOList.add(taskHistoryMapper.taskHistoryEntityToModel(taskHistoryEntity));
+            }
+            return taskHistoryDTOList;
+        }
+        else {
+            throw new TaskNotFoundException ("Task is not found for the particular task id");
+        }
+    }
 }

@@ -33,4 +33,5 @@ public class TaskHistoryEntity {
     @Column(name = "created_date", nullable = false)
     @CreationTimestamp
     private Timestamp createdDate;
+
 }
