@@ -91,14 +91,8 @@ public class TaskImpl implements Taskservice {
                 for (TaskHistoryEntity taskHistoryEntity : taskHistoryEntities) {
                     taskHistoryDTOList.add(taskHistoryMapper.taskHistoryEntityToModel(taskHistoryEntity));
                 }
-                return taskHistoryDTOList;
             }
-            else {
-                return taskHistoryDTOList;
-            }
-        }
-        else{
-            throw new UserNotFoundException("The user is not found");
-        }
+            return taskHistoryDTOList;
+        } else throw new UserNotFoundException("The user is not found");
     }
 }
