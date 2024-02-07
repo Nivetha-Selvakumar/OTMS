@@ -1,7 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.service.impl;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
-import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class TaskImpl implements Taskservice {
