@@ -44,8 +44,8 @@ public class TaskController {
 
 
     @GetMapping(path="/history/{taskId}")
-    public ResponseEntity<List<TaskHistoryDTO>> historyTask(@PathVariable Integer taskId) throws CommonException{
-        return new ResponseEntity<>(taskService.viewHistoryTask(taskId),HttpStatus.OK);
+    public ResponseEntity<List<TaskHistoryDTO>> historyTask(@PathVariable Integer taskId,@RequestParam Integer userId) throws CommonException{
+        return new ResponseEntity<>(taskService.viewHistoryTask(taskId,userId),HttpStatus.OK);
 
     }
 }

@@ -16,7 +16,7 @@ public interface Taskservice {
 
     String deleteTask(Integer taskId, Integer userId) throws CommonException;
 
-    List<TaskHistoryDTO> viewHistoryTask(Integer taskId) throws  CommonException;
+    List<TaskHistoryDTO> viewHistoryTask(Integer taskId,Integer userId) throws  CommonException;
 
 
 }

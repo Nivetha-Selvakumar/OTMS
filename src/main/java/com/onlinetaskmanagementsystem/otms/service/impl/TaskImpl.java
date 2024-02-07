@@ -7,6 +7,7 @@ import com.onlinetaskmanagementsystem.otms.Enum.Status;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
+import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.mapper.TaskHistoryMapper;
@@ -82,18 +83,22 @@ public class TaskImpl implements Taskservice {
     }
 
     @Override
-    public List<TaskHistoryDTO> viewHistoryTask(Integer taskId) throws CommonException {
-        List<TaskHistoryDTO> taskHistoryDTOList = null;
-        if (validation.taskHistoryValidation(taskId)) {
-            List<TaskHistoryEntity> taskHistoryEntities = taskHistoryRepo.findAllByTaskId(taskId);
-            taskHistoryDTOList = new ArrayList<>();
-            for (TaskHistoryEntity taskHistoryEntity : taskHistoryEntities) {
-                taskHistoryDTOList.add(taskHistoryMapper.taskHistoryEntityToModel(taskHistoryEntity));
+    public List<TaskHistoryDTO> viewHistoryTask(Integer taskId,Integer userId) throws CommonException {
+        List<TaskHistoryDTO> taskHistoryDTOList = new ArrayList<>();
+        if(validation.taskHistoryUserValidation(userId)){
+            if (validation.taskHistoryValidation(taskId)) {
+                List<TaskHistoryEntity> taskHistoryEntities = taskHistoryRepo.findAllByTaskId(taskId);
+                for (TaskHistoryEntity taskHistoryEntity : taskHistoryEntities) {
+                    taskHistoryDTOList.add(taskHistoryMapper.taskHistoryEntityToModel(taskHistoryEntity));
+                }
+                return taskHistoryDTOList;
             }
-            return taskHistoryDTOList;
+            else {
+                return taskHistoryDTOList;
+            }
         }
-        else {
-            throw new TaskNotFoundException ("Task is not found for the particular task id");
+        else{
+            throw new UserNotFoundException("The user is not found");
         }
     }
 }

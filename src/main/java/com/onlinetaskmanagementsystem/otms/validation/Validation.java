@@ -112,4 +112,13 @@ public class Validation {
         }
         return taskHistoryFlag;
     }
+
+    public boolean taskHistoryUserValidation(Integer userId) {
+        boolean taskHistoryFlag2 = false;
+        Optional<UserEntity> userEntity = userRepo.findById(userId);
+        if (userEntity.isPresent()) {
+            taskHistoryFlag2 = true;
+        }
+        return taskHistoryFlag2;
+    }
 }
