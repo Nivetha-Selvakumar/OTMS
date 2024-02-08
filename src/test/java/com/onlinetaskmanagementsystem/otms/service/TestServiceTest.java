@@ -54,7 +54,6 @@ class TestServiceTest {
 
     TaskHistoryEntity taskHistoryEntity = new TaskHistoryEntity();
 
-    List<TaskDTO> taskDTOList = new ArrayList<>();
     List<TaskEntity> taskEntityList = new ArrayList<>();
 
     List<TaskHistoryEntity> taskHistoryEntityList = new ArrayList<>();

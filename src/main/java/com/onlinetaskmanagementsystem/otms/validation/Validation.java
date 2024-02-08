@@ -30,7 +30,6 @@ public class Validation {
     //check exist email If email exists return true and send error message
     public boolean checkExistEmail(String email) {
         boolean userFlag = false;
-
         Integer id = userRepo.checkUser(email);
         if (id != null && id > 0) {
             userFlag = true;
@@ -52,7 +51,6 @@ public class Validation {
     public boolean taskTitleValidation(String taskTitle) {
         boolean taskFlag1 = false;
         TaskEntity task = taskRepo.findByTaskTitle(taskTitle);
-
         if (task != null && task.getTaskTitle().equals(taskTitle)) {
             taskFlag1 = true;
         }
