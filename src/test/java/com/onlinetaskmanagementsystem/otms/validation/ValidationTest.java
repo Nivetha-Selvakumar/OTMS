@@ -12,6 +12,7 @@ import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.repository.TaskHistoryRepo;
 import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,14 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static junit.framework.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ValidationTest {
+class ValidationTest {
     @InjectMocks
     Validation validation;
 
@@ -77,28 +76,28 @@ public class ValidationTest {
     void checkExistEmailValidationTest(){
         when(userRepo.checkUser(userDTO.getEmail())).thenReturn(1);
         boolean result = validation.checkExistEmail(userDTO.getEmail());
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
     void checkExistUserValidationTest(){
         when(userRepo.checkUserName(userDTO.getUsername())).thenReturn(String.valueOf(true));
         boolean result= validation.checkExistUser(userDTO.getUsername());
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
     void taskTitleValidationTest(){
         when(taskRepo.findByTaskTitle(taskDTO.getTaskTitle())).thenReturn(taskEntity);
         boolean result= validation.taskTitleValidation(taskDTO.getTaskTitle());
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
     void  taskUserValidationTest(){
         when(taskRepo.findByUserId(taskDTO.getUserId())).thenReturn(taskEntityList);
         boolean result= validation.taskUserValidation(taskDTO.getUserId());
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
@@ -151,13 +150,13 @@ public class ValidationTest {
     @Test
     void taskExistValidationByUserIdAndTaskIdValidationTest3() throws TaskNotFoundException {
         TaskEntity taskEntity1 = validation.taskExistValidationByUserIdAndTaskId(null,null);
-        assertEquals(null,taskEntity1);
+        Assertions.assertEquals(null, taskEntity1);
     }
     @Test
     void taskHistoryValidationTest2(){
         when(taskHistoryRepo.findByTaskId(taskHistoryDTO.getTaskId())).thenReturn(taskHistoryEntityList);
         boolean result= validation.taskHistoryValidation(1);
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
