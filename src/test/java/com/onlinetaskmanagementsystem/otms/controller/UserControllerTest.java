@@ -5,7 +5,6 @@ import com.onlinetaskmanagementsystem.otms.DTO.SignInDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
-import com.onlinetaskmanagementsystem.otms.mapper.UserMapperTest;
 import com.onlinetaskmanagementsystem.otms.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +29,6 @@ class UserControllerTest {
 
     SignUpResponse signUpResponse = new SignUpResponse();
 
-    UserMapperTest userMapper = new UserMapperTest();
 
 
     @Test

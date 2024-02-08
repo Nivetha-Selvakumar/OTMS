@@ -7,7 +7,6 @@ import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.mapper.UserMapper;
-import com.onlinetaskmanagementsystem.otms.mapper.UserMapperTest;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
 import com.onlinetaskmanagementsystem.otms.service.impl.UserImpl;
 import com.onlinetaskmanagementsystem.otms.validation.Validation;
