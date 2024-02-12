@@ -17,6 +17,7 @@ public class SignInDTO {
     @NotBlank(message = "Enter your Email")
     @Pattern(regexp = "^(.+)+@(.+)$", message = "Enter your appropriate Email!")
     private  String email;
+
     @NotBlank(message="Enter your password")
     private  String password;
 

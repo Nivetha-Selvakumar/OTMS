@@ -53,6 +53,7 @@ public class TaskImpl implements TaskService {
     }
     @Override
     public List<TaskDTO> viewList(Integer userId) throws CommonException{
+
         validation.taskViewValidation(userId);
         List<TaskEntity> taskEntities= taskRepo.findAllByUserId(userId);
         List<TaskDTO> taskDTOList = new ArrayList<>();

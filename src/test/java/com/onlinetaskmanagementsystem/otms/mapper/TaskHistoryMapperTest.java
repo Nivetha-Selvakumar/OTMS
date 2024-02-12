@@ -47,6 +47,7 @@ class TaskHistoryMapperTest {
     @Test
     void taskHistoryModelToEntityTest1(){
         taskHistoryMapper.taskHistoryModelToEntity(taskEntity,"Created");
+
     }
     @Test
     void taskHistoryModelToEntityTest(){

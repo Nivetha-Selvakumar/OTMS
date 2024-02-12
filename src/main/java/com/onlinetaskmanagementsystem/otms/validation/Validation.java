@@ -69,6 +69,7 @@ public class Validation {
 
 
     public void taskViewValidation(Integer userId) throws UserNotFoundException {
+
         if (userId != null) {
             Optional<UserEntity> userEntity = userRepo.findByIdAndUserStatus(userId, Status.ACTIVE);
             if (userEntity.isEmpty())

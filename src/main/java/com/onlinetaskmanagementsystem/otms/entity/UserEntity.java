@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.sql.Timestamp;
 
 
@@ -64,6 +63,4 @@ public class UserEntity {
     @Column(name = "updated_date", nullable = false)
     @UpdateTimestamp
     private Timestamp updatedDate;
-
-
 }

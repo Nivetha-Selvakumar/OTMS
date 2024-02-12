@@ -34,14 +34,15 @@ public class UserImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public SignUpResponse addUser(UserDTO userDTO) throws UserCreationException{
+    public SignUpResponse addUser(UserDTO userDTO) throws UserCreationException {
+
         UserEntity userEntity = userMapper.userModelToEntity(userDTO);
+
         if (validation.checkExistEmail(userDTO.getEmail())) {
             throw new UserCreationException("User already exist. Try with other email !");
-        }
-        else if(validation.checkExistUser(userDTO.getUsername().trim())){
+        } else if (validation.checkExistUser(userDTO.getUsername().trim())) {
             throw new UserCreationException("User already exist. Try with other username !");
-        }else {
+        } else {
             return userMapper.mapToSignUpModel(userRepo.save(userEntity));
         }
 
@@ -51,15 +52,15 @@ public class UserImpl implements UserService {
     public UserDTO signInUser(@Valid SignInDTO signInDTO) throws CommonException {
 
 //        Verifying the user credentials to signin
-            if (validation.checkExistEmail(signInDTO.getEmail())) {
-                UserEntity userEntity = userRepo.getUserRecord(signInDTO.getEmail());
-                if (userEntity.getPassword().equals(signInDTO.getPassword())) {
-                     return userMapper.userEntityToModel(userEntity);
-                } else {
-                    throw new UserCredentialException("Password Mismatched");
-                }
+        if (validation.checkExistEmail(signInDTO.getEmail())) {
+            UserEntity userEntity = userRepo.getUserRecord(signInDTO.getEmail());
+            if (userEntity.getPassword().equals(signInDTO.getPassword())) {
+                return userMapper.userEntityToModel(userEntity);
             } else {
-                throw new UserNotFoundException("Given email not exists");
+                throw new UserCredentialException("Password Mismatched");
             }
+        } else {
+            throw new UserNotFoundException("Given email not exists");
+        }
     }
 }
