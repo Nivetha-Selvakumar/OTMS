@@ -1,6 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.validation;
 
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
@@ -71,7 +71,7 @@ public class Validation {
     public void taskViewValidation(Integer userId) throws UserNotFoundException {
 
         if (userId != null) {
-            Optional<UserEntity> userEntity = userRepo.findByIdAndUserStatus(userId, Status.ACTIVE);
+            Optional<UserEntity> userEntity = userRepo.findByIdAndUserStatus(userId, ActiveStatus.ACTIVE);
             if (userEntity.isEmpty())
                 throw new UserNotFoundException("This user is not found");
         }
@@ -79,7 +79,7 @@ public class Validation {
 
     public TaskEntity taskExistValidation(Integer taskId) throws TaskNotFoundException {
         if (taskId != null) {
-            Optional<TaskEntity> taskEntity = taskRepo.findByIdAndActiveStatus(taskId, Status.ACTIVE);
+            Optional<TaskEntity> taskEntity = taskRepo.findByIdAndActiveStatus(taskId, ActiveStatus.ACTIVE);
             if (taskEntity.isEmpty()) {
                 throw new TaskNotFoundException("The task is not found");
             } else {
@@ -91,7 +91,7 @@ public class Validation {
 
     public TaskEntity taskExistValidationByUserIdAndTaskId(Integer taskId, Integer userId) throws TaskNotFoundException {
         if (taskId != null) {
-            Optional<TaskEntity> taskEntity = taskRepo.findByUserIdAndIdAndActiveStatus(userId, taskId, Status.ACTIVE);
+            Optional<TaskEntity> taskEntity = taskRepo.findByUserIdAndIdAndActiveStatus(userId, taskId, ActiveStatus.ACTIVE);
             if (taskEntity.isEmpty()) {
                 throw new TaskNotFoundException("The task is not found");
             } else {

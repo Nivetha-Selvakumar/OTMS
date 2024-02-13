@@ -1,6 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.DTO;
 
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -41,11 +41,12 @@ public class UserDTO {
 
     @NotBlank(message = "Enter your Password")
     @Size(min = 6,max = 8,message = "Your Password must be in 6 to 8 characters")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=()-])(?=\\S+$).{6,8}$",message = "Enter valid password. Your password must contain atleast one capital case, one small case, one number and one special character and must be between 6-8 characters")
     private String password;
 
     private Timestamp registrationDate;
 
-    private Status userStatus;
+    private ActiveStatus userStatus;
 
     private Integer createdBy;
 

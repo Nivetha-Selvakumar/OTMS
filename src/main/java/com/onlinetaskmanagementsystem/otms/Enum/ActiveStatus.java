@@ -1,8 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.Enum;
 
-public enum Status {
+public enum ActiveStatus {
     ACTIVE,INACTIVE
-
-
 
 }

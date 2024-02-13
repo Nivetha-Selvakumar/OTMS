@@ -3,7 +3,7 @@ package com.onlinetaskmanagementsystem.otms.service.impl;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
@@ -76,7 +76,7 @@ public class TaskImpl implements TaskService {
     public String deleteTask(Integer taskId, Integer userId) throws TaskNotFoundException {
         if(validation.taskUserValidation(userId)){
             TaskEntity taskEntity = validation.taskExistValidationByUserIdAndTaskId(taskId, userId);
-            taskEntity.setActiveStatus(Status.INACTIVE);
+            taskEntity.setActiveStatus(ActiveStatus.INACTIVE);
             taskRepo.save(taskEntity);
             return "Successfully Inactive!";
        }

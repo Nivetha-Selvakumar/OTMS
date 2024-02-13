@@ -2,7 +2,7 @@ package com.onlinetaskmanagementsystem.otms.service;
 
 import com.onlinetaskmanagementsystem.otms.DTO.SignInDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
@@ -50,7 +50,7 @@ class UserServiceTest {
         userDTO.setEmail("n@gmail.com");
         userDTO.setPassword("nivetha");
         userDTO.setRegistrationDate(Timestamp.valueOf("2024-02-02 12:30:40"));
-        userDTO.setUserStatus(Status.valueOf("ACTIVE"));
+        userDTO.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
         userDTO.setCreatedBy(1);
         userDTO.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         userDTO.setUpdatedBy(1);
@@ -58,7 +58,7 @@ class UserServiceTest {
 
         userEntity.setId(1);
         userEntity.setEmail("n@gmail.com");
-        userEntity.setUserStatus(Status.valueOf("ACTIVE"));
+        userEntity.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
         userEntity.setEmpCode("111");
         userEntity.setEmpName("nive");
         userEntity.setRoleId(1);

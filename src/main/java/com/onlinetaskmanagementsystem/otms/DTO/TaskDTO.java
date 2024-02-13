@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.DTO;
 
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
+import com.onlinetaskmanagementsystem.otms.Enum.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -27,8 +28,8 @@ public class TaskDTO {
     @NotBlank(message = "Enter task Priority as High,Medium,Low")
     private String priority;
 
-    @NotBlank(message = "Enter the Task status as Progress, Completed or Not yet started ")
-    private String taskStatus;
+//    @NotBlank(message = "Enter the Task status as Progress, Completed or Not yet started ")
+    private TaskStatus taskStatus;
 
     @NotNull(message = "Enter the Planned start date")
  //   @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",message = "Invalid timestamp format. Use the format: yyyy-MM-ddTHH:mm:ss")
@@ -43,7 +44,7 @@ public class TaskDTO {
 //    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",message = "Invalid timestamp format. Use the format: yyyy-MM-ddTHH:mm:ss")
     private Timestamp actualCompletionDate;
 
-    private Status activeStatus;
+    private ActiveStatus activeStatus;
 
     @NotNull(message = "Enter the Assignee id")
     private Integer assigneeId;

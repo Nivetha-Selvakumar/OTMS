@@ -1,6 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.repository;
 
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -20,7 +20,7 @@ public interface TaskRepo extends JpaRepository<TaskEntity,Integer> {
 
     List<TaskEntity> findAllByUserId(Integer userId);
 
-    Optional<TaskEntity> findByIdAndActiveStatus(Integer taskId, Status status);
+    Optional<TaskEntity> findByIdAndActiveStatus(Integer taskId, ActiveStatus status);
 
-    Optional<TaskEntity> findByUserIdAndIdAndActiveStatus(Integer userId, Integer taskId, Status status);
+    Optional<TaskEntity> findByUserIdAndIdAndActiveStatus(Integer userId, Integer taskId, ActiveStatus status);
 }

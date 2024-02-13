@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.entity;
 
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
+import com.onlinetaskmanagementsystem.otms.Enum.TaskStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public class TaskEntity {
     private String priority;
 
     @Column(name = "task_status", nullable = false, length = 10)
-    private String taskStatus;
+    private TaskStatus taskStatus;
 
     @Column(name = "planned_start_date", nullable = false)
     private Timestamp plannedStartDate;
@@ -52,7 +53,7 @@ public class TaskEntity {
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "active_status", nullable = false, length = 15)
-    private Status activeStatus;
+    private ActiveStatus activeStatus;
 
     @Column(name = "assignee_id", nullable = false)
     private Integer assigneeId;

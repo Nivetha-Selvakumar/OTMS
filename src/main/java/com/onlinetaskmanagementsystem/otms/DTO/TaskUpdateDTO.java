@@ -1,6 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.DTO;
 
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -37,7 +37,7 @@ public class TaskUpdateDTO {
 
     private Timestamp actualCompletionDate;
 
-    private Status activeStatus;
+    private ActiveStatus activeStatus;
 
     private Integer assigneeId;
 

@@ -3,7 +3,8 @@ package com.onlinetaskmanagementsystem.otms.service;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
+import com.onlinetaskmanagementsystem.otms.Enum.TaskStatus;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
@@ -68,7 +69,7 @@ class TestServiceTest {
         taskDTO.setTaskDesc("created for testing");
         taskDTO.setUpdatedBy(1);
         taskDTO.setUpdatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
-        taskDTO.setActiveStatus(Status.valueOf("ACTIVE"));
+        taskDTO.setActiveStatus(ActiveStatus.valueOf("ACTIVE"));
         taskDTO.setActualCompletionDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         taskDTO.setActualStartDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         taskDTO.setAssigneeId(1);
@@ -77,14 +78,14 @@ class TestServiceTest {
         taskDTO.setPlannedCompletionDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         taskDTO.setPlannedStartDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         taskDTO.setPriority("High");
-        taskDTO.setTaskStatus("Active");
+        taskDTO.setTaskStatus(TaskStatus.NOT_YET_STARTED);
         taskEntity.setId(1);
         taskEntityList.add(taskEntity);
         taskEntityList.add(taskEntity);
         taskHistoryEntityList.add(taskHistoryEntity);
         taskHistoryEntityList.add(taskHistoryEntity);
         taskHistoryDTO.setTaskId(1);
-        taskEntity.setActiveStatus(Status.valueOf("INACTIVE"));
+        taskEntity.setActiveStatus(ActiveStatus.valueOf("INACTIVE"));
     }
     @Test
     void addTaskTest1(){

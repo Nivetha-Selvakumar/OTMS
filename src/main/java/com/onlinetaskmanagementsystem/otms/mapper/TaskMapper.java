@@ -2,7 +2,8 @@ package com.onlinetaskmanagementsystem.otms.mapper;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
+import com.onlinetaskmanagementsystem.otms.Enum.TaskStatus;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +15,12 @@ public class TaskMapper {
         taskEntity.setTaskTitle(taskDTO.getTaskTitle());
         taskEntity.setTaskDesc(taskDTO.getTaskDesc());
         taskEntity.setPriority(taskDTO.getPriority());
-        taskEntity.setTaskStatus(taskDTO.getTaskStatus());
+        taskEntity.setTaskStatus(TaskStatus.NOT_YET_STARTED);
         taskEntity.setPlannedStartDate(taskDTO.getPlannedStartDate());
         taskEntity.setPlannedCompletionDate(taskDTO.getPlannedCompletionDate());
         taskEntity.setActualStartDate(taskDTO.getActualStartDate());
         taskEntity.setActualCompletionDate(taskDTO.getActualCompletionDate());
-        taskEntity.setActiveStatus(Status.ACTIVE);
+        taskEntity.setActiveStatus(ActiveStatus.ACTIVE);
         taskEntity.setAssigneeId(taskDTO.getAssigneeId());
         taskEntity.setAssignerId(taskDTO.getAssignerId());
         taskEntity.setCreatedBy(taskDTO.getAssignerId());
@@ -37,7 +38,7 @@ public class TaskMapper {
         taskDTO.setTaskTitle(taskEntity.getTaskTitle());
         taskDTO.setTaskDesc(taskEntity.getTaskDesc());
         taskDTO.setPriority(taskEntity.getPriority());
-        taskDTO.setTaskStatus(taskEntity.getTaskStatus());
+        taskDTO.setTaskStatus(TaskStatus.NOT_YET_STARTED);
         taskDTO.setPlannedStartDate(taskEntity.getPlannedStartDate());
         taskDTO.setPlannedCompletionDate(taskEntity.getPlannedCompletionDate());
         taskDTO.setActualStartDate(taskEntity.getActualStartDate());
@@ -58,7 +59,7 @@ public class TaskMapper {
         taskEntity.setTaskTitle(taskUpdateDTODTO.getTaskTitle());
         taskEntity.setTaskDesc(taskUpdateDTODTO.getTaskDesc());
         taskEntity.setPriority(taskUpdateDTODTO.getPriority());
-        taskEntity.setTaskStatus(taskUpdateDTODTO.getTaskStatus());
+        taskEntity.setTaskStatus(TaskStatus.valueOf(taskUpdateDTODTO.getTaskStatus()));
         taskEntity.setPlannedStartDate(taskUpdateDTODTO.getPlannedStartDate());
         taskEntity.setPlannedCompletionDate(taskUpdateDTODTO.getPlannedCompletionDate());
         taskEntity.setActualStartDate(taskUpdateDTODTO.getActualStartDate());

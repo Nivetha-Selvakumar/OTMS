@@ -1,9 +1,8 @@
 package com.onlinetaskmanagementsystem.otms.mapper;
 
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
-import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,7 @@ class UserMapperTest {
         userEntity.setEmail("n@gmail.com");
         userEntity.setPassword("nive");
         userEntity.setRegistrationDate(Timestamp.valueOf("2024-01-02 12:30:40"));
-        userEntity.setUserStatus(Status.valueOf("ACTIVE"));
+        userEntity.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
         userEntity.setCreatedBy(1);
         userEntity.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         userEntity.setUpdatedBy(1);
@@ -52,7 +51,7 @@ class UserMapperTest {
         userDTO.setEmail("n@gmail.com");
         userDTO.setPassword("nive");
         userDTO.setRegistrationDate(Timestamp.valueOf("2024-01-02 12:30:40"));
-        userDTO.setUserStatus(Status.valueOf("ACTIVE"));
+        userDTO.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
         userDTO.setCreatedBy(1);
         userDTO.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         userDTO.setUpdatedBy(1);

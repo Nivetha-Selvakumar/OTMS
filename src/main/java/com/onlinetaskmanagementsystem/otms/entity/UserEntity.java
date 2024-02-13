@@ -1,7 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.entity;
 
 
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -48,7 +48,7 @@ public class UserEntity {
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "user_status", nullable = false, length = 10)
-    private Status userStatus;
+    private ActiveStatus userStatus;
 
     @Column(name = "created_by", nullable = false)
     private Integer createdBy;

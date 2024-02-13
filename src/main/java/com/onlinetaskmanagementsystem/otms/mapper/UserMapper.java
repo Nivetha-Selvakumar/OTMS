@@ -3,7 +3,7 @@ package com.onlinetaskmanagementsystem.otms.mapper;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +18,7 @@ public class UserMapper {
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setRegistrationDate(userDTO.getRegistrationDate());
-        userEntity.setUserStatus(Status.ACTIVE);
+        userEntity.setUserStatus(ActiveStatus.ACTIVE);
         userEntity.setCreatedBy(userDTO.getCreatedBy());
         userEntity.setCreatedDate(userDTO.getCreatedDate());
         userEntity.setUpdatedBy(userDTO.getUpdatedBy());

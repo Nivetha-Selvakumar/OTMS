@@ -2,7 +2,7 @@ package com.onlinetaskmanagementsystem.otms.repository;
 
 
 
-import com.onlinetaskmanagementsystem.otms.Enum.Status;
+import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,5 +24,5 @@ public interface UserRepo extends JpaRepository<UserEntity,Integer> {
     @Query("select u from UserEntity u where u.email=:email")
     public UserEntity getUserRecord(String email);
 
-    Optional<UserEntity> findByIdAndUserStatus(Integer userId, Status status);
+    Optional<UserEntity> findByIdAndUserStatus(Integer userId, ActiveStatus status);
 }
