@@ -94,7 +94,6 @@ class UserMapperTest {
         assertEquals(userDTO.getCreatedDate(),userDTO1.getCreatedDate());
         assertEquals(userDTO.getUpdatedBy(),userDTO1.getUpdatedBy());
         assertEquals(userDTO.getUpdatedDate(),userDTO1.getUpdatedDate());
-
     }
 
     @Test
