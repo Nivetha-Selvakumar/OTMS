@@ -3,6 +3,7 @@ package com.onlinetaskmanagementsystem.otms.mapper;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 @ExtendWith(MockitoExtension .class)
 class TaskHistoryMapperTest {
@@ -53,21 +52,21 @@ class TaskHistoryMapperTest {
     void taskHistoryModelToEntityTest(){
         String expected = "Created for testing";
         TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, expected);
-        assertNotNull(taskHistoryEntity);
-        assertEquals(taskEntity.getId(), taskHistoryEntity.getTaskId());
-        assertEquals(taskEntity.getCreatedBy(), taskHistoryEntity.getCreatedBy());
-        assertEquals(taskEntity.getCreatedDate(), taskHistoryEntity.getCreatedDate());
-        assertEquals(expected, taskHistoryEntity.getDescription());
+        Assertions.assertNotNull(taskHistoryEntity);
+        Assertions.assertEquals(taskEntity.getId(), taskHistoryEntity.getTaskId());
+        Assertions.assertEquals(taskEntity.getCreatedBy(), taskHistoryEntity.getCreatedBy());
+        Assertions.assertEquals(taskEntity.getCreatedDate(), taskHistoryEntity.getCreatedDate());
+        Assertions.assertEquals(expected, taskHistoryEntity.getDescription());
 
     }
 
     @Test
     void taskHistoryEntityToModel(){
         TaskHistoryDTO taskHistoryDTO1=taskHistoryMapper.taskHistoryEntityToModel(taskHistoryEntity);
-        assertEquals(taskHistoryDTO.getTaskId(),taskHistoryDTO1.getTaskId());
-        assertEquals(taskHistoryDTO.getDescription(),taskHistoryDTO1.getDescription());
-        assertEquals(taskHistoryDTO.getCreatedDate(),taskHistoryDTO1.getCreatedDate());
-        assertEquals(taskHistoryDTO.getCreatedBy(),taskHistoryDTO1.getCreatedBy());
+        Assertions.assertEquals(taskHistoryDTO.getTaskId(),taskHistoryDTO1.getTaskId());
+        Assertions.assertEquals(taskHistoryDTO.getDescription(),taskHistoryDTO1.getDescription());
+        Assertions.assertEquals(taskHistoryDTO.getCreatedDate(),taskHistoryDTO1.getCreatedDate());
+        Assertions.assertEquals(taskHistoryDTO.getCreatedBy(),taskHistoryDTO1.getCreatedBy());
     }
 
 

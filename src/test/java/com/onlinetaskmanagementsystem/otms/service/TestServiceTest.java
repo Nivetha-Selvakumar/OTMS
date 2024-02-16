@@ -14,6 +14,7 @@ import com.onlinetaskmanagementsystem.otms.repository.TaskHistoryRepo;
 import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
 import com.onlinetaskmanagementsystem.otms.service.impl.TaskImpl;
 import com.onlinetaskmanagementsystem.otms.validation.Validation;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +26,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -97,7 +97,7 @@ class TestServiceTest {
         });
         String expectedMessage = "This task is already present for this user";
         String actualMessage=commonException.getMessage();
-        assertEquals(expectedMessage,actualMessage);
+        Assertions.assertEquals(expectedMessage,actualMessage);
     }
     @Test
     void addTaskTest2() throws CommonException {
@@ -106,7 +106,7 @@ class TestServiceTest {
         when(taskRepo.save(taskEntity)).thenReturn(taskEntity);
         when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity,"Created")).thenReturn(new TaskHistoryEntity());
         Integer response = taskImpl.addTask(taskDTO);
-        assertEquals(taskEntity.getId(),response);
+        Assertions.assertEquals(taskEntity.getId(),response);
     }
 
     @Test
@@ -114,7 +114,7 @@ class TestServiceTest {
         when(taskRepo.findAllByUserId(taskDTO.getUserId())).thenReturn(taskEntityList);
         when(taskMapper.taskEntityToModel(taskEntity)).thenReturn(taskDTO);
         List<TaskDTO> actual = taskImpl.viewList(taskDTO.getUserId());
-        assertEquals(taskEntityList.size(),actual.size());
+        Assertions.assertEquals(taskEntityList.size(),actual.size());
 
     }
 
@@ -124,7 +124,7 @@ class TestServiceTest {
         when(taskRepo.save(taskMapper.taskUpdateModelToEntity(taskUpdateDTO,taskEntity))).thenReturn(taskEntity);
         when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity, taskUpdateDTO.getUpdatedField())).thenReturn(taskHistoryEntity);
         TaskDTO actual = taskImpl.viewUpdatedTask(taskHistoryDTO.getTaskId(), taskUpdateDTO);
-        assertEquals(taskMapper.taskEntityToModel(taskEntity),actual);
+        Assertions.assertEquals(taskMapper.taskEntityToModel(taskEntity),actual);
     }
 
     @Test
@@ -133,7 +133,7 @@ class TestServiceTest {
         when(validation.taskExistValidationByUserIdAndTaskId(taskHistoryDTO.getTaskId(), taskDTO.getUserId())).thenReturn(taskEntity);
         String actual = taskImpl.deleteTask(taskHistoryDTO.getTaskId(), taskDTO.getUserId());
         String expected = "Successfully Inactive!";
-        assertEquals(expected,actual);
+        Assertions.assertEquals(expected,actual);
     }
 
     @Test
@@ -141,7 +141,7 @@ class TestServiceTest {
         when(validation.taskUserValidation(taskDTO.getUserId())).thenReturn(false);
         String actual = taskImpl.deleteTask(taskHistoryDTO.getTaskId(), taskDTO.getUserId());
         String expected = "No Active task is for particular User";
-        assertEquals(expected,actual);
+        Assertions.assertEquals(expected,actual);
     }
 
     @Test
@@ -151,7 +151,7 @@ class TestServiceTest {
         when(taskHistoryRepo.findAllByTaskId(taskHistoryDTO.getTaskId())).thenReturn(taskHistoryEntityList);
 
         List<TaskHistoryDTO> actual = taskImpl.viewHistoryTask(taskHistoryDTO.getTaskId(), taskDTO.getUserId());
-        assertEquals(taskHistoryEntityList.size(),actual.size());
+        Assertions.assertEquals(taskHistoryEntityList.size(),actual.size());
     }
     @Test
     void viewHistoryTaskTest2() throws CommonException{
@@ -161,6 +161,6 @@ class TestServiceTest {
         });
         String expectedMessage = "The user is not found";
         String actualMessage=commonException.getMessage();
-        assertEquals(expectedMessage,actualMessage);
+        Assertions.assertEquals(expectedMessage,actualMessage);
     }
 }

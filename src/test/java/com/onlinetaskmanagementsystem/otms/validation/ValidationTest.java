@@ -150,7 +150,7 @@ class ValidationTest {
     @Test
     void taskExistValidationByUserIdAndTaskIdValidationTest3() throws TaskNotFoundException {
         TaskEntity taskEntity1 = validation.taskExistValidationByUserIdAndTaskId(null,null);
-        Assertions.assertEquals(null, taskEntity1);
+        Assertions.assertNull(taskEntity1);
     }
     @Test
     void taskHistoryValidationTest2(){

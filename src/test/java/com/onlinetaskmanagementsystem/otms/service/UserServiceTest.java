@@ -10,6 +10,7 @@ import com.onlinetaskmanagementsystem.otms.mapper.UserMapper;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
 import com.onlinetaskmanagementsystem.otms.service.impl.UserImpl;
 import com.onlinetaskmanagementsystem.otms.validation.Validation;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,9 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -84,7 +84,7 @@ class UserServiceTest {
         });
         String expectedMessage = "User already exist. Try with other email !";
         String actualMessage=commonException.getMessage();
-        assertEquals(expectedMessage,actualMessage);
+        Assertions.assertEquals(expectedMessage,actualMessage);
     }
 
     @Test
@@ -93,7 +93,7 @@ class UserServiceTest {
         when(validation.checkExistUser(userDTO.getUsername())).thenReturn(Boolean.valueOf("User already exist. Try with other username !"));
         when(userRepo.save(userEntity)).thenReturn(userEntity);
         SignUpResponse id1 = userImpl.addUser(userDTO);
-        assertEquals(null,id1);
+        Assertions.assertNull(id1);
     }
 
     @Test
@@ -105,7 +105,7 @@ class UserServiceTest {
         });
         String expectedMessage = "User already exist. Try with other username !";
         String actualMessage=commonException.getMessage();
-        assertEquals(expectedMessage,actualMessage);
+        Assertions.assertEquals(expectedMessage,actualMessage);
     }
 
     @Test
@@ -114,7 +114,7 @@ class UserServiceTest {
         when(userRepo.getUserRecord(signInDTO.getEmail())).thenReturn(userEntity);
         when(userMapper.userEntityToModel(userEntity)).thenReturn(userDTO);
         UserDTO userDTOResponse = userImpl.signInUser(signInDTO);
-        assertEquals(userDTO.getEmail(),userDTOResponse.getEmail());
+        Assertions.assertEquals(userDTO.getEmail(),userDTOResponse.getEmail());
     }
 
     @Test
@@ -127,7 +127,7 @@ class UserServiceTest {
             userImpl.signInUser(signInDTO);
         });
         String response = "Password Mismatched";
-        assertEquals("Password Mismatched",response);
+        Assertions.assertEquals("Password Mismatched",response);
     }
 
     @Test
@@ -137,7 +137,7 @@ class UserServiceTest {
             userImpl.signInUser(signInDTO);
         });
         String response = "Given email not exists";
-        assertEquals("Given email not exists",response);
+        Assertions.assertEquals("Given email not exists",response);
     }
 
 

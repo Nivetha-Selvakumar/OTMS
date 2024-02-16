@@ -4,6 +4,7 @@ import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
-
-import static org.junit.Assert.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class UserMapperTest {
@@ -64,43 +63,43 @@ class UserMapperTest {
     @Test
     void userModelToEntityTest(){
         UserEntity userEntity1 = userMapper.userModelToEntity(userDTO);
-        assertEquals(userEntity.getOrgId(),userEntity1.getOrgId());
-        assertEquals(userEntity.getRoleId(),userEntity1.getRoleId());
-        assertEquals(userEntity.getEmpCode(),userEntity1.getEmpCode());
-        assertEquals(userEntity.getEmpName(),userEntity1.getEmpName());
-        assertEquals(userEntity.getUsername(),userEntity1.getUsername());
-        assertEquals(userEntity.getEmail(),userEntity1.getEmail());
-        assertEquals(userEntity.getPassword(),userEntity1.getPassword());
-        assertEquals(userEntity.getRegistrationDate(),userEntity1.getRegistrationDate());
-        assertEquals(userEntity.getCreatedBy(),userEntity1.getCreatedBy());
-        assertEquals(userEntity.getCreatedDate(),userEntity1.getCreatedDate());
-        assertEquals(userEntity.getUpdatedBy(),userEntity1.getUpdatedBy());
-        assertEquals(userEntity.getUpdatedDate(),userEntity1.getUpdatedDate());
+        Assertions.assertEquals(userEntity.getOrgId(), userEntity1.getOrgId());
+        Assertions.assertEquals(userEntity.getRoleId(),userEntity1.getRoleId());
+        Assertions.assertEquals(userEntity.getEmpCode(),userEntity1.getEmpCode());
+        Assertions.assertEquals(userEntity.getEmpName(),userEntity1.getEmpName());
+        Assertions.assertEquals(userEntity.getUsername(),userEntity1.getUsername());
+        Assertions.assertEquals(userEntity.getEmail(),userEntity1.getEmail());
+        Assertions.assertEquals(userEntity.getPassword(),userEntity1.getPassword());
+        Assertions.assertEquals(userEntity.getRegistrationDate(),userEntity1.getRegistrationDate());
+        Assertions.assertEquals(userEntity.getCreatedBy(),userEntity1.getCreatedBy());
+        Assertions.assertEquals(userEntity.getCreatedDate(),userEntity1.getCreatedDate());
+        Assertions.assertEquals(userEntity.getUpdatedBy(),userEntity1.getUpdatedBy());
+        Assertions.assertEquals(userEntity.getUpdatedDate(),userEntity1.getUpdatedDate());
 
     }
 
     @Test
     void userEntityToModelTest(){
         UserDTO userDTO1 = userMapper.userEntityToModel(userEntity);
-        assertEquals(userDTO.getOrgId(),userDTO1.getOrgId());
-        assertEquals(userDTO.getRoleId(),userDTO1.getRoleId());
-        assertEquals(userDTO.getEmpCode(),userDTO1.getEmpCode());
-        assertEquals(userDTO.getEmpName(),userDTO1.getEmpName());
-        assertEquals(userDTO.getUsername(),userDTO1.getUsername());
-        assertEquals(userDTO.getEmail(),userDTO1.getEmail());
-        assertEquals(userDTO.getPassword(),userDTO1.getPassword());
-        assertEquals(userDTO.getRegistrationDate(),userDTO1.getRegistrationDate());
-        assertEquals(userDTO.getCreatedBy(),userDTO1.getCreatedBy());
-        assertEquals(userDTO.getCreatedDate(),userDTO1.getCreatedDate());
-        assertEquals(userDTO.getUpdatedBy(),userDTO1.getUpdatedBy());
-        assertEquals(userDTO.getUpdatedDate(),userDTO1.getUpdatedDate());
+        Assertions.assertEquals(userDTO.getOrgId(),userDTO1.getOrgId());
+        Assertions.assertEquals(userDTO.getRoleId(),userDTO1.getRoleId());
+        Assertions.assertEquals(userDTO.getEmpCode(),userDTO1.getEmpCode());
+        Assertions.assertEquals(userDTO.getEmpName(),userDTO1.getEmpName());
+        Assertions.assertEquals(userDTO.getUsername(),userDTO1.getUsername());
+        Assertions.assertEquals(userDTO.getEmail(),userDTO1.getEmail());
+        Assertions.assertEquals(userDTO.getPassword(),userDTO1.getPassword());
+        Assertions.assertEquals(userDTO.getRegistrationDate(),userDTO1.getRegistrationDate());
+        Assertions.assertEquals(userDTO.getCreatedBy(),userDTO1.getCreatedBy());
+        Assertions.assertEquals(userDTO.getCreatedDate(),userDTO1.getCreatedDate());
+        Assertions.assertEquals(userDTO.getUpdatedBy(),userDTO1.getUpdatedBy());
+        Assertions.assertEquals(userDTO.getUpdatedDate(),userDTO1.getUpdatedDate());
     }
 
     @Test
     void mapToSignUpModelTest(){
         SignUpResponse signUpResponse1= userMapper.mapToSignUpModel(userEntity);
-        assertEquals(signUpResponse.getUserId(),signUpResponse1.getUserId());
-        assertEquals(signUpResponse.getMessage(),signUpResponse1.getMessage());
+        Assertions.assertEquals(signUpResponse.getUserId(),signUpResponse1.getUserId());
+        Assertions.assertEquals(signUpResponse.getMessage(),signUpResponse1.getMessage());
     }
 
 

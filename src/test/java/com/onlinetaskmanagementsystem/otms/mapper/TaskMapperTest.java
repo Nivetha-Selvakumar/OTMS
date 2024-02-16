@@ -5,6 +5,7 @@ import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Enum.TaskStatus;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
-
-import static org.junit.Assert.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class TaskMapperTest {
@@ -84,50 +83,50 @@ class TaskMapperTest {
     @Test
     void taskModeltoEntityTest(){
         TaskEntity taskEntity1 = taskMapper.taskModeltoEntity(taskDTO);
-        assertEquals(taskEntity.getId(),taskEntity1.getId());
-        assertEquals(taskEntity.getTaskTitle(),taskEntity1.getTaskTitle());
-        assertEquals(taskEntity.getTaskDesc(),taskEntity1.getTaskDesc());
-        assertEquals(taskEntity.getPriority(),taskEntity1.getPriority());
-        assertEquals(taskEntity.getTaskStatus(),taskEntity1.getTaskStatus());
-        assertEquals(taskEntity.getPlannedStartDate(),taskEntity1.getPlannedStartDate());
-        assertEquals(taskEntity.getPlannedCompletionDate(),taskEntity1.getPlannedCompletionDate());
-        assertEquals(taskEntity.getActualStartDate(),taskEntity1.getActualStartDate());
-        assertEquals(taskEntity.getActualCompletionDate(),taskEntity1.getActualCompletionDate());
-        assertEquals(taskEntity.getActiveStatus(),taskEntity1.getActiveStatus());
-        assertEquals(taskEntity.getAssigneeId(),taskEntity1.getAssigneeId());
-        assertEquals(taskEntity.getAssignerId(),taskEntity1.getAssignerId());
-        assertEquals(taskEntity.getCreatedBy(),taskEntity1.getCreatedBy());
-        assertEquals(taskEntity.getUpdatedBy(),taskEntity1.getUpdatedBy());
-        assertEquals(taskEntity.getCreatedDate(),taskEntity1.getCreatedDate());
-        assertEquals(taskEntity.getUpdatedDate(),taskEntity1.getUpdatedDate());
+        Assertions.assertEquals(taskEntity.getId(),taskEntity1.getId());
+        Assertions.assertEquals(taskEntity.getTaskTitle(),taskEntity1.getTaskTitle());
+        Assertions.assertEquals(taskEntity.getTaskDesc(),taskEntity1.getTaskDesc());
+        Assertions.assertEquals(taskEntity.getPriority(),taskEntity1.getPriority());
+        Assertions.assertEquals(taskEntity.getTaskStatus(),taskEntity1.getTaskStatus());
+        Assertions.assertEquals(taskEntity.getPlannedStartDate(),taskEntity1.getPlannedStartDate());
+        Assertions.assertEquals(taskEntity.getPlannedCompletionDate(),taskEntity1.getPlannedCompletionDate());
+        Assertions.assertEquals(taskEntity.getActualStartDate(),taskEntity1.getActualStartDate());
+        Assertions.assertEquals(taskEntity.getActualCompletionDate(),taskEntity1.getActualCompletionDate());
+        Assertions.assertEquals(taskEntity.getActiveStatus(),taskEntity1.getActiveStatus());
+        Assertions.assertEquals(taskEntity.getAssigneeId(),taskEntity1.getAssigneeId());
+        Assertions.assertEquals(taskEntity.getAssignerId(),taskEntity1.getAssignerId());
+        Assertions.assertEquals(taskEntity.getCreatedBy(),taskEntity1.getCreatedBy());
+        Assertions.assertEquals(taskEntity.getUpdatedBy(),taskEntity1.getUpdatedBy());
+        Assertions.assertEquals(taskEntity.getCreatedDate(),taskEntity1.getCreatedDate());
+        Assertions.assertEquals(taskEntity.getUpdatedDate(),taskEntity1.getUpdatedDate());
 
     }
 
     @Test
     void taskEntityToModel(){
         TaskDTO taskDTO1 = taskMapper.taskEntityToModel(taskEntity);
-        assertEquals(taskDTO.getTaskTitle(),taskDTO1.getTaskTitle());
-        assertEquals(taskDTO.getTaskDesc(),taskDTO1.getTaskDesc());
-        assertEquals(taskDTO.getPriority(),taskDTO1.getPriority());
-        assertEquals(taskDTO.getTaskStatus(),taskDTO1.getTaskStatus());
-        assertEquals(taskDTO.getPlannedStartDate(),taskDTO1.getPlannedStartDate());
-        assertEquals(taskDTO.getPlannedCompletionDate(),taskDTO1.getPlannedCompletionDate());
-        assertEquals(taskDTO.getActualStartDate(),taskDTO1.getActualStartDate());
-        assertEquals(taskDTO.getActualCompletionDate(),taskDTO1.getActualCompletionDate());
-        assertEquals(taskDTO.getActiveStatus(),taskDTO1.getActiveStatus());
-        assertEquals(taskDTO.getAssigneeId(),taskDTO1.getAssigneeId());
-        assertEquals(taskDTO.getAssignerId(),taskDTO1.getAssignerId());
-        assertEquals(taskDTO.getCreatedBy(),taskDTO1.getCreatedBy());
-        assertEquals(taskDTO.getUpdatedBy(),taskDTO1.getUpdatedBy());
-        assertEquals(taskDTO.getCreatedDate(),taskDTO1.getCreatedDate());
-        assertEquals(taskDTO.getUpdatedDate(),taskDTO1.getUpdatedDate());
+        Assertions.assertEquals(taskDTO.getTaskTitle(),taskDTO1.getTaskTitle());
+        Assertions.assertEquals(taskDTO.getTaskDesc(),taskDTO1.getTaskDesc());
+        Assertions.assertEquals(taskDTO.getPriority(),taskDTO1.getPriority());
+        Assertions.assertEquals(taskDTO.getTaskStatus(),taskDTO1.getTaskStatus());
+        Assertions.assertEquals(taskDTO.getPlannedStartDate(),taskDTO1.getPlannedStartDate());
+        Assertions.assertEquals(taskDTO.getPlannedCompletionDate(),taskDTO1.getPlannedCompletionDate());
+        Assertions.assertEquals(taskDTO.getActualStartDate(),taskDTO1.getActualStartDate());
+        Assertions.assertEquals(taskDTO.getActualCompletionDate(),taskDTO1.getActualCompletionDate());
+        Assertions.assertEquals(taskDTO.getActiveStatus(),taskDTO1.getActiveStatus());
+        Assertions.assertEquals(taskDTO.getAssigneeId(),taskDTO1.getAssigneeId());
+        Assertions.assertEquals(taskDTO.getAssignerId(),taskDTO1.getAssignerId());
+        Assertions.assertEquals(taskDTO.getCreatedBy(),taskDTO1.getCreatedBy());
+        Assertions.assertEquals(taskDTO.getUpdatedBy(),taskDTO1.getUpdatedBy());
+        Assertions.assertEquals(taskDTO.getCreatedDate(),taskDTO1.getCreatedDate());
+        Assertions.assertEquals(taskDTO.getUpdatedDate(),taskDTO1.getUpdatedDate());
 
     }
 
     @Test
     void taskUpdateModeltoEntityTest(){
         TaskEntity taskEntity1 = taskMapper.taskUpdateModelToEntity(taskUpdateDTO,taskEntity);
-        assertEquals(taskUpdateDTO.getTaskTitle(),taskEntity1.getTaskTitle());
+        Assertions.assertEquals(taskUpdateDTO.getTaskTitle(),taskEntity1.getTaskTitle());
     }
 
 }

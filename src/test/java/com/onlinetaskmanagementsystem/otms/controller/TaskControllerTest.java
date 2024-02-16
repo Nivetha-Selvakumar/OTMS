@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 
@@ -41,21 +40,21 @@ class TaskControllerTest {
         List<TaskDTO> taskDTOList = Arrays.asList(taskDTO1,taskDTO2);
         when(taskService.viewList(taskDTO.getUserId())).thenReturn(taskDTOList);
         List<TaskDTO> response = taskController.listTask(taskDTO.getUserId()).getBody();
-        assertEquals(taskDTOList,response);
+        Assertions.assertEquals(taskDTOList,response);
     }
 
     @Test
     void createTaskTest() throws CommonException{
         when(taskService.addTask(taskDTO)).thenReturn(1);
         ResponseEntity<String> response= taskController.createTask(taskDTO);
-        assertEquals("Successfully Registered!\nYour TaskId: 1",response.getBody());
+        Assertions.assertEquals("Successfully Registered!\nYour TaskId: 1",response.getBody());
     }
 
     @Test
     void updateTaskTest() throws CommonException{
         when(taskService.viewUpdatedTask(taskHistoryDTO.getTaskId(), new TaskUpdateDTO())).thenReturn(taskDTO);
         TaskDTO response= taskController.updateTask(taskHistoryDTO.getTaskId(),new TaskUpdateDTO()).getBody();
-        assertEquals(taskDTO,response);
+        Assertions.assertEquals(taskDTO,response);
     }
 
     @Test
@@ -72,7 +71,7 @@ class TaskControllerTest {
         List<TaskHistoryDTO> taskHistoryDTOList = Arrays.asList(taskHistoryDTO1,taskHistoryDTO2);
         when(taskService.viewHistoryTask(taskHistoryDTO.getTaskId(),taskDTO.getUserId())).thenReturn(taskHistoryDTOList);
         List<TaskHistoryDTO> responseEntity = taskController.historyTask(taskHistoryDTO.getTaskId(),taskDTO.getUserId()).getBody();
-        assertEquals(taskHistoryDTOList,responseEntity);
+        Assertions.assertEquals(taskHistoryDTOList,responseEntity);
 
     }
 
