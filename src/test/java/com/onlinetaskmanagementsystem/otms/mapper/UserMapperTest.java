@@ -36,7 +36,6 @@ class UserMapperTest {
         userEntity.setEmail("n@gmail.com");
         userEntity.setPassword("nive");
         userEntity.setRegistrationDate(Timestamp.valueOf("2024-01-02 12:30:40"));
-        userEntity.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
         userEntity.setCreatedBy(1);
         userEntity.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         userEntity.setUpdatedBy(1);
@@ -73,7 +72,6 @@ class UserMapperTest {
         assertEquals(userEntity.getEmail(),userEntity1.getEmail());
         assertEquals(userEntity.getPassword(),userEntity1.getPassword());
         assertEquals(userEntity.getRegistrationDate(),userEntity1.getRegistrationDate());
-        assertEquals(userEntity.getUserStatus(),userEntity1.getUserStatus());
         assertEquals(userEntity.getCreatedBy(),userEntity1.getCreatedBy());
         assertEquals(userEntity.getCreatedDate(),userEntity1.getCreatedDate());
         assertEquals(userEntity.getUpdatedBy(),userEntity1.getUpdatedBy());
@@ -92,7 +90,6 @@ class UserMapperTest {
         assertEquals(userDTO.getEmail(),userDTO1.getEmail());
         assertEquals(userDTO.getPassword(),userDTO1.getPassword());
         assertEquals(userDTO.getRegistrationDate(),userDTO1.getRegistrationDate());
-        assertEquals(userDTO.getUserStatus(),userDTO1.getUserStatus());
         assertEquals(userDTO.getCreatedBy(),userDTO1.getCreatedBy());
         assertEquals(userDTO.getCreatedDate(),userDTO1.getCreatedDate());
         assertEquals(userDTO.getUpdatedBy(),userDTO1.getUpdatedBy());
