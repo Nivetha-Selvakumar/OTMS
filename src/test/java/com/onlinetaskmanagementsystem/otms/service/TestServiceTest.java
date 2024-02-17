@@ -30,7 +30,7 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TestServiceTest {
+class  TestServiceTest {
     @InjectMocks
     TaskImpl taskImpl;
 
