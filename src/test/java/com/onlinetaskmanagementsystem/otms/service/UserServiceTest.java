@@ -42,8 +42,8 @@ class UserServiceTest {
 
     @BeforeEach
     void init(){
-        userDTO.setOrgId(1);
-        userDTO.setRoleId(1);
+//        userDTO.setOrgId(1);
+//        userDTO.setRoleId(1);
         userDTO.setEmpCode("111");
         userDTO.setEmpName("nive");
         userDTO.setUsername("nive23");
@@ -51,23 +51,15 @@ class UserServiceTest {
         userDTO.setPassword("nivetha");
         userDTO.setRegistrationDate(Timestamp.valueOf("2024-02-02 12:30:40"));
         userDTO.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
-        userDTO.setCreatedBy(1);
-        userDTO.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
-        userDTO.setUpdatedBy(1);
-        userDTO.setUpdatedDate(Timestamp.valueOf("2024-01-30 12:30:40"));
+
 
         userEntity.setId(1);
         userEntity.setEmail("n@gmail.com");
         userEntity.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
         userEntity.setEmpCode("111");
         userEntity.setEmpName("nive");
-        userEntity.setRoleId(1);
         userEntity.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         userEntity.setRegistrationDate(Timestamp.valueOf("2024-01-02 12:30:40"));
-        userEntity.setCreatedBy(1);
-        userEntity.setUpdatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
-        userEntity.setUpdatedBy(1);
-        userEntity.setOrgId(1);
         userEntity.setUsername("nive");
         userEntity.setPassword("nivetha");
 
@@ -76,7 +68,7 @@ class UserServiceTest {
     }
 
     @Test
-    void addUserTest1() throws CommonException {
+    void addUserTest1() {
         when(userMapper.userModelToEntity(userDTO)).thenReturn(userEntity);
         when(validation.checkExistEmail(userDTO.getEmail())).thenReturn(true);
         CommonException commonException=assertThrows(CommonException.class,() -> {
@@ -97,7 +89,7 @@ class UserServiceTest {
     }
 
     @Test
-    void  addUserTest3() throws CommonException{
+    void  addUserTest3(){
         when(userMapper.userModelToEntity(userDTO)).thenReturn(userEntity);
         when(validation.checkExistUser(userDTO.getUsername())).thenReturn(true);
         CommonException commonException=assertThrows(CommonException.class,() -> {
@@ -118,7 +110,7 @@ class UserServiceTest {
     }
 
     @Test
-    void signInUserTest2() throws CommonException{
+    void signInUserTest2(){
         signInDTO.setEmail("n@gmail.com");
         signInDTO.setPassword("Niv");
         when(validation.checkExistEmail(signInDTO.getEmail())).thenReturn(true);
@@ -126,17 +118,17 @@ class UserServiceTest {
         CommonException commonException=assertThrows(CommonException.class,() -> {
             userImpl.signInUser(signInDTO);
         });
-        String response = "Password Mismatched";
+        String response = commonException.getMessage();
         Assertions.assertEquals("Password Mismatched",response);
     }
 
     @Test
-    void signInUserTest3() throws CommonException{
+    void signInUserTest3(){
         when(validation.checkExistEmail(signInDTO.getEmail())).thenReturn(false);
         CommonException commonException=assertThrows(CommonException.class,() -> {
             userImpl.signInUser(signInDTO);
         });
-        String response = "Given email not exists";
+        String response = commonException.getMessage();
         Assertions.assertEquals("Given email not exists",response);
     }
 

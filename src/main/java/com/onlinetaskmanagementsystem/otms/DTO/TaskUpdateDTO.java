@@ -16,7 +16,9 @@ import java.sql.Timestamp;
 @Component
 public class TaskUpdateDTO {
 
+    @NotNull(message = "Enter User id")
     private Integer userId;
+
     @Size(min = 10,max = 50,message = "Your TaskTitle must be in 10 to 50 characters")
     private String taskTitle;
 
@@ -43,11 +45,11 @@ public class TaskUpdateDTO {
 
     private Integer assignerId;
 
-    private Integer createdBy;
-
     private Integer updatedBy;
 
     @NotNull
     private String updatedField;
+
+    
 
 }

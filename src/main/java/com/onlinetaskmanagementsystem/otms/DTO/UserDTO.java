@@ -2,11 +2,11 @@ package com.onlinetaskmanagementsystem.otms.DTO;
 
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.stereotype.Component;
+
 import java.sql.Timestamp;
 
 @NoArgsConstructor
@@ -17,11 +17,6 @@ import java.sql.Timestamp;
 @Component
 public class UserDTO {
 
-    @NotNull(message = "Enter your OrganisationId")
-    private Integer orgId;
-
-    @NotNull (message = "Enter your RoleId")
-    private Integer roleId;
 
     @NotBlank(message = "Enter your EmployeeCode")
     private String empCode;
@@ -48,12 +43,5 @@ public class UserDTO {
 
     private ActiveStatus userStatus;
 
-    private Integer createdBy;
-
-    private Timestamp createdDate;
-
-    private Integer updatedBy;
-
-    private Timestamp updatedDate;
 
 }

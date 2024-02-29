@@ -3,10 +3,14 @@ package com.onlinetaskmanagementsystem.otms.entity;
 
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+
 import java.sql.Timestamp;
+import java.util.List;
 
 
 @Entity
@@ -20,12 +24,6 @@ public class UserEntity {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-    @Column(name = "org_id", nullable = false)
-    private Integer orgId;
-
-    @Column(name = "role_id", nullable = false)
-    private Integer roleId;
 
     @Column(name = "emp_code", nullable = false, length = 50 )
     private String empCode;
@@ -46,21 +44,17 @@ public class UserEntity {
     @CreationTimestamp
     private Timestamp registrationDate;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false, length = 10)
     private ActiveStatus userStatus;
 
-    @Column(name = "created_by", nullable = false)
-    private Integer createdBy;
 
     @Column(name = "created_date", nullable = false)
     @CreationTimestamp
     private Timestamp createdDate;
 
-    @Column(name = "updated_by", nullable = false)
-    private Integer updatedBy;
 
-    @Column(name = "updated_date", nullable = false)
-    @UpdateTimestamp
-    private Timestamp updatedDate;
+    @OneToMany(mappedBy = "userId")
+    List<TaskEntity> taskEntityList;
+
 }

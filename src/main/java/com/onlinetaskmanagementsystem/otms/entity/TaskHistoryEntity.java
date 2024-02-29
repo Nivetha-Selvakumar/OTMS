@@ -21,11 +21,13 @@ public class TaskHistoryEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name="task_id", nullable = false)
-    private Integer taskId;
+    @ManyToOne
+    @JoinColumn(name = "task_id",nullable = false)
+    private TaskEntity taskId;
 
-    @Column(name = "created_by", nullable = false)
-    private Integer createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", referencedColumnName = "Id", nullable = false)
+    private UserEntity createdBy;
 
     @Column(name="description", nullable = false, length =1000)
     private String description;

@@ -20,9 +20,10 @@ public class TaskHistoryDTO {
     @NotBlank(message = "Enter Task update description")
     private String description;
 
-    @NotNull(message = "Enter Created by User Id")
+    @NotNull(message = "Enter Createdby")
     private Integer createdBy;
 
     private Timestamp createdDate;
+
 
 }

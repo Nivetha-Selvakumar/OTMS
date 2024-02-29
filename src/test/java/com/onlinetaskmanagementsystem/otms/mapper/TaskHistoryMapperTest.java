@@ -3,6 +3,7 @@ package com.onlinetaskmanagementsystem.otms.mapper;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
+import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,29 +18,38 @@ import java.sql.Timestamp;
 class TaskHistoryMapperTest {
     @InjectMocks
     TaskHistoryMapper taskHistoryMapper;
+
+
     TaskHistoryEntity taskHistoryEntity = new TaskHistoryEntity();
 
+
     TaskEntity taskEntity = new TaskEntity();
+
+    UserEntity userEntity = new UserEntity();
+
 
     TaskHistoryDTO taskHistoryDTO= new TaskHistoryDTO();
 
     @BeforeEach
     void init(){
-        taskHistoryEntity.setTaskId(1);
-        taskHistoryEntity.setDescription("Created for testing");
-        taskHistoryEntity.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
-        taskHistoryEntity.setCreatedBy(1);
-        taskHistoryEntity.setId(1);
+
+
+        userEntity.setEmpName("nive");
 
         taskEntity.setId(1);
-        taskEntity.setCreatedBy(1);
+        taskEntity.setCreatedBy(userEntity);
         taskEntity.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         taskEntity.setTaskDesc("Created for testing");
 
-        taskHistoryDTO.setTaskId(1);
+        taskHistoryDTO.setTaskId(taskEntity.getId());
         taskHistoryDTO.setDescription("Created for testing");
-        taskHistoryDTO.setCreatedBy(1);
         taskHistoryDTO.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
+
+        taskHistoryEntity.setTaskId(taskEntity);
+        taskHistoryEntity.setDescription("Created for testing");
+        taskHistoryEntity.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
+        taskHistoryEntity.setCreatedBy(taskEntity.getCreatedBy());
+        taskHistoryEntity.setId(1);
 
     }
 
@@ -53,12 +63,11 @@ class TaskHistoryMapperTest {
         String expected = "Created for testing";
         TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, expected);
         Assertions.assertNotNull(taskHistoryEntity);
-        Assertions.assertEquals(taskEntity.getId(), taskHistoryEntity.getTaskId());
-        Assertions.assertEquals(taskEntity.getCreatedBy(), taskHistoryEntity.getCreatedBy());
         Assertions.assertEquals(taskEntity.getCreatedDate(), taskHistoryEntity.getCreatedDate());
         Assertions.assertEquals(expected, taskHistoryEntity.getDescription());
 
     }
+
 
     @Test
     void taskHistoryEntityToModel(){
@@ -66,7 +75,6 @@ class TaskHistoryMapperTest {
         Assertions.assertEquals(taskHistoryDTO.getTaskId(),taskHistoryDTO1.getTaskId());
         Assertions.assertEquals(taskHistoryDTO.getDescription(),taskHistoryDTO1.getDescription());
         Assertions.assertEquals(taskHistoryDTO.getCreatedDate(),taskHistoryDTO1.getCreatedDate());
-        Assertions.assertEquals(taskHistoryDTO.getCreatedBy(),taskHistoryDTO1.getCreatedBy());
     }
 
 

@@ -1,6 +1,8 @@
 package com.onlinetaskmanagementsystem.otms.validation;
 
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
+import com.onlinetaskmanagementsystem.otms.Enum.TaskIds;
+import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -50,18 +53,19 @@ public class Validation {
 
     public boolean taskTitleValidation(String taskTitle) {
         boolean taskFlag1 = false;
-        TaskEntity task = taskRepo.findByTaskTitle(taskTitle);
-        if (task != null && task.getTaskTitle().equals(taskTitle)) {
+        Optional<TaskEntity> task = taskRepo.findByTaskTitle(taskTitle);
+        if (task.isPresent() && task.get().getTaskTitle().equals(taskTitle)) {
             taskFlag1 = true;
         }
         return taskFlag1;
 
     }
 
+
     public boolean taskUserValidation(Integer userId) {
         boolean taskFlag2 = false;
-        List<TaskEntity> taskEntity = taskRepo.findByUserId(userId);
-        if (!taskEntity.isEmpty() && taskEntity.get(0).getUserId().equals(userId)) {
+        List<TaskEntity> taskEntity = taskRepo.findByUserId(userRepo.findById(userId).get());
+        if (!taskEntity.isEmpty() && taskEntity.get(0).getUserId().getId().equals(userId)) {
             taskFlag2 = true;
         }
         return taskFlag2;
@@ -91,7 +95,7 @@ public class Validation {
 
     public TaskEntity taskExistValidationByUserIdAndTaskId(Integer taskId, Integer userId) throws TaskNotFoundException {
         if (taskId != null) {
-            Optional<TaskEntity> taskEntity = taskRepo.findByUserIdAndIdAndActiveStatus(userId, taskId, ActiveStatus.ACTIVE);
+            Optional<TaskEntity> taskEntity = taskRepo.findByUserIdAndIdAndActiveStatus(userRepo.findById(userId).get(), taskRepo.findById(taskId).get(), ActiveStatus.ACTIVE);
             if (taskEntity.isEmpty()) {
                 throw new TaskNotFoundException("The task is not found");
             } else {
@@ -104,7 +108,7 @@ public class Validation {
     public boolean taskHistoryValidation(Integer taskId) {
         boolean taskHistoryFlag = false;
         if(taskId != null){
-            List<TaskHistoryEntity> taskHistoryEntity = taskHistoryRepo.findByTaskId(taskId);
+            List<TaskHistoryEntity> taskHistoryEntity = taskHistoryRepo.findByTaskId(taskRepo.findById(taskId).get());
             if (!taskHistoryEntity.isEmpty() && (taskHistoryEntity.get(0).getTaskId().equals(taskId))) {
                     taskHistoryFlag = true;
                 }
@@ -119,5 +123,46 @@ public class Validation {
             taskHistoryFlag2 = true;
         }
         return taskHistoryFlag2;
+    }
+
+    public boolean taskUserIdAndTaskTitleValidation(Integer userId, String taskTitle) {
+        boolean flag = false;
+        Optional<TaskEntity> taskEntity = taskRepo.findByTaskTitleAndUserIdAndActiveStatus(taskTitle,userRepo.findById(userId).get(),ActiveStatus.ACTIVE);
+        if(taskEntity.isPresent()){
+            flag=true;
+        }
+        return flag;
+    }
+
+    public boolean taskUserValidationAndStatus(Integer userId) {
+        boolean flag=false;
+       Optional<UserEntity> userEntity = userRepo.findByIdAndUserStatus(userId, ActiveStatus.ACTIVE);
+       if (userEntity.isPresent()){
+           flag=true;
+       }
+       return flag;
+    }
+
+    public boolean taskUserIdValidation(Integer userId) {
+        boolean flag= false;
+        Optional<UserEntity> userEntity = userRepo.findById(userId);
+        if (userEntity.isPresent()){
+            flag=true;
+        }
+        return flag;
+    }
+
+    public UserEntity validatedUserIds(Map<String, Integer> ids) throws CommonException {
+        boolean assigneeIdValid = taskUserIdValidation(ids.get(TaskIds.ASSIGNEEID.toString()));
+        boolean assignerIdValid = taskUserIdValidation(ids.get(TaskIds.ASSIGNERID.toString()));
+
+        if(!assigneeIdValid&& !assignerIdValid){
+            throw new UserNotFoundException("Assigner and Assignee Ids are not valid");
+        }else if (!assigneeIdValid){
+            throw new UserNotFoundException("Assignee id is not valid");
+        }else if (!assignerIdValid){
+            throw new UserNotFoundException("Assigner id is not valid");
+        }
+        return null;
     }
 }

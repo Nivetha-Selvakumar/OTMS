@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.entity;
 
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
+import com.onlinetaskmanagementsystem.otms.Enum.Priority;
 import com.onlinetaskmanagementsystem.otms.Enum.TaskStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -24,8 +26,9 @@ public class TaskEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name="user_id", nullable = false)
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private UserEntity userId;
 
     @Column(name="task_title", nullable = false, length =50)
     private String taskTitle;
@@ -33,10 +36,12 @@ public class TaskEntity {
     @Column(name="task_desc", nullable = false, length =1000)
     private String taskDesc;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="priority", nullable = false, length =10)
-    private String priority;
+    private Priority priority;
 
-    @Column(name = "task_status", nullable = false, length = 10)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "task_status",  length = 10, nullable = false)
     private TaskStatus taskStatus;
 
     @Column(name = "planned_start_date", nullable = false)
@@ -55,17 +60,24 @@ public class TaskEntity {
     @Column(name = "active_status", nullable = false, length = 15)
     private ActiveStatus activeStatus;
 
-    @Column(name = "assignee_id", nullable = false)
-    private Integer assigneeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignee_id",nullable = false)
+    private UserEntity assigneeId;
 
-    @Column(name = "assigner_id", nullable = false)
-    private Integer assignerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigner_id",nullable = false)
+    private UserEntity assignerId;
 
-    @Column(name = "created_by", nullable = false)
-    private Integer createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by",nullable = false)
+    private UserEntity createdBy;
 
-    @Column(name = "updated_by", nullable = false)
-    private Integer updatedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by",nullable = false)
+    private UserEntity updatedBy;
+
+    @OneToMany(mappedBy = "taskId")
+    List<TaskHistoryEntity> taskHistoryEntity;
 
     @Column(name = "created_date", nullable = false)
     @CreationTimestamp
@@ -74,6 +86,7 @@ public class TaskEntity {
     @Column(name = "updated_date", nullable = false)
     @UpdateTimestamp
     private Timestamp updatedDate;
+
 
 
 }

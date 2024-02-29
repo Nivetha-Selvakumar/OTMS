@@ -4,14 +4,16 @@ import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
+import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
+    @Autowired
+    UserRepo userRepo;
     public UserEntity userModelToEntity(UserDTO userDTO){
         UserEntity userEntity = new UserEntity();
-        userEntity.setOrgId(userDTO.getOrgId());
-        userEntity.setRoleId(userDTO.getRoleId());
         userEntity.setEmpCode(userDTO.getEmpCode());
         userEntity.setEmpName(userDTO.getEmpName());
         userEntity.setUsername(userDTO.getUsername());
@@ -19,10 +21,6 @@ public class UserMapper {
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setRegistrationDate(userDTO.getRegistrationDate());
         userEntity.setUserStatus(ActiveStatus.ACTIVE);
-        userEntity.setCreatedBy(userDTO.getCreatedBy());
-        userEntity.setCreatedDate(userDTO.getCreatedDate());
-        userEntity.setUpdatedBy(userDTO.getUpdatedBy());
-        userEntity.setUpdatedDate(userDTO.getUpdatedDate());
 
         return userEntity;
 
@@ -30,8 +28,6 @@ public class UserMapper {
 
     public UserDTO userEntityToModel(UserEntity userEntity){
         UserDTO userDTO = new UserDTO();
-        userDTO.setOrgId(userEntity.getOrgId());
-        userDTO.setRoleId(userEntity.getRoleId());
         userDTO.setEmpCode(userEntity.getEmpCode());
         userDTO.setEmpName(userEntity.getEmpName());
         userDTO.setUsername(userEntity.getUsername());
@@ -39,10 +35,6 @@ public class UserMapper {
         userDTO.setPassword(userEntity.getPassword());
         userDTO.setRegistrationDate(userEntity.getRegistrationDate());
         userDTO.setUserStatus(userEntity.getUserStatus());
-        userDTO.setCreatedBy(userEntity.getCreatedBy());
-        userDTO.setCreatedDate(userEntity.getCreatedDate());
-        userDTO.setUpdatedBy(userEntity.getUpdatedBy());
-        userDTO.setUpdatedDate(userEntity.getUpdatedDate());
 
         return userDTO;
 
