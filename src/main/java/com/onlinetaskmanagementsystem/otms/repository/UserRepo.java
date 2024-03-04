@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -25,5 +26,8 @@ public interface UserRepo extends JpaRepository<UserEntity,Integer> {
     UserEntity getUserRecord(String email);
 
     Optional<UserEntity> findByIdAndUserStatus(Integer userId, ActiveStatus status);
+
+    List<UserEntity> findAllByUserStatus(ActiveStatus activeStatus);
+
 
 }

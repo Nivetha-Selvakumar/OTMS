@@ -139,7 +139,7 @@ class ValidationTest {
     void taskExistValidationByUserIdAndTaskIdValidationTest1() throws CommonException{
         when(userRepo.findById(userEntity.getId())).thenReturn(Optional.ofNullable(userEntity));
         when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.ofNullable(taskEntity));
-        when(taskRepo.findByUserIdAndIdAndActiveStatus(userEntity,taskEntity, taskDTO.getActiveStatus())).thenReturn(Optional.ofNullable(taskEntity));
+        when(taskRepo.findByUserIdAndIdAndActiveStatus(userEntity,taskEntity.getId(), taskDTO.getActiveStatus())).thenReturn(Optional.ofNullable(taskEntity));
         validation.taskExistValidationByUserIdAndTaskId(1,1);
     }
 
@@ -147,7 +147,7 @@ class ValidationTest {
     void  taskExistValidationByUserIdAndTaskIdValidationTest2() {
         when(userRepo.findById(userEntity.getId())).thenReturn(Optional.ofNullable(userEntity));
         when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.ofNullable(taskEntity));
-        when(taskRepo.findByUserIdAndIdAndActiveStatus(userEntity,taskEntity, taskDTO.getActiveStatus())).thenReturn(Optional.empty());
+        when(taskRepo.findByUserIdAndIdAndActiveStatus(userEntity,taskEntity.getId(), taskDTO.getActiveStatus())).thenReturn(Optional.empty());
         assertThrows(CommonException.class,() -> {
             validation.taskExistValidationByUserIdAndTaskId(1,1);
         });

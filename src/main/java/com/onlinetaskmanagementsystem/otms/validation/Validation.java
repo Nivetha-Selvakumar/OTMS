@@ -11,6 +11,8 @@ import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.repository.TaskHistoryRepo;
 import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -73,7 +75,6 @@ public class Validation {
 
 
     public void taskViewValidation(Integer userId) throws UserNotFoundException {
-
         if (userId != null) {
             Optional<UserEntity> userEntity = userRepo.findByIdAndUserStatus(userId, ActiveStatus.ACTIVE);
             if (userEntity.isEmpty())
@@ -93,14 +94,26 @@ public class Validation {
         return null;
     }
 
+    public boolean taskIdExistValidation(Integer taskId) {
+        boolean flag= false;
+        Optional<TaskEntity> taskEntity = taskRepo.findById(taskId);
+        if (taskEntity.isPresent()){
+            flag=true;
+        }
+        return flag;
+    }
+
     public TaskEntity taskExistValidationByUserIdAndTaskId(Integer taskId, Integer userId) throws TaskNotFoundException {
-        if (taskId != null) {
-            Optional<TaskEntity> taskEntity = taskRepo.findByUserIdAndIdAndActiveStatus(userRepo.findById(userId).get(), taskRepo.findById(taskId).get(), ActiveStatus.ACTIVE);
-            if (taskEntity.isEmpty()) {
-                throw new TaskNotFoundException("The task is not found");
-            } else {
-                return taskEntity.get();
-            }
+        boolean taskId1= taskIdExistValidation(taskId);
+        boolean userId1= taskUserIdValidation(userId);
+        if (taskId != null && (taskId1 && userId1)){
+                Optional<TaskEntity> taskEntity = taskRepo.findByUserIdAndIdAndActiveStatus(userRepo.findById(userId).get(),taskId,ActiveStatus.ACTIVE);
+                if (taskEntity.isEmpty()) {
+                    throw new TaskNotFoundException("The task is not found");
+                } else {
+                    return taskEntity.get();
+                }
+
         }
         return null;
     }

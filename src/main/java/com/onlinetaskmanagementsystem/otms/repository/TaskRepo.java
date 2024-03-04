@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +23,12 @@ public interface TaskRepo extends JpaRepository<TaskEntity,Integer> {
     List<TaskEntity> findAllByUserId(UserEntity userId);
 
     Optional<TaskEntity> findByIdAndActiveStatus(Integer taskId, ActiveStatus status);
-
-    Optional<TaskEntity> findByUserIdAndIdAndActiveStatus(UserEntity userId, TaskEntity taskId, ActiveStatus status);
+    
 
     Optional<TaskEntity> findByTaskTitleAndUserIdAndActiveStatus(String taskTitle, UserEntity userEntity, ActiveStatus activeStatus);
+
+    Optional<TaskEntity> findByUserIdAndIdAndActiveStatus(UserEntity userId, Integer taskId, ActiveStatus activeStatus);
+
+
+    List<TaskEntity> findAllByAssigneeIdAndPlannedCompletionDateAndActiveStatus(UserEntity user, Date dueDate, ActiveStatus activeStatus);
 }
