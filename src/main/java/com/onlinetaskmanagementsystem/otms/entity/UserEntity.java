@@ -57,4 +57,5 @@ public class UserEntity {
     @OneToMany(mappedBy = "userId")
     List<TaskEntity> taskEntityList;
 
+
 }

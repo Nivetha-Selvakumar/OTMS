@@ -11,8 +11,6 @@ import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.repository.TaskHistoryRepo;
 import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -122,7 +120,7 @@ public class Validation {
         boolean taskHistoryFlag = false;
         if(taskId != null){
             List<TaskHistoryEntity> taskHistoryEntity = taskHistoryRepo.findByTaskId(taskRepo.findById(taskId).get());
-            if (!taskHistoryEntity.isEmpty() && (taskHistoryEntity.get(0).getTaskId().equals(taskId))) {
+            if (!taskHistoryEntity.isEmpty() && (taskHistoryEntity.get(0).getTaskId().getId().equals(taskId))) {
                     taskHistoryFlag = true;
                 }
         }
@@ -149,11 +147,11 @@ public class Validation {
 
     public boolean taskUserValidationAndStatus(Integer userId) {
         boolean flag=false;
-       Optional<UserEntity> userEntity = userRepo.findByIdAndUserStatus(userId, ActiveStatus.ACTIVE);
-       if (userEntity.isPresent()){
-           flag=true;
-       }
-       return flag;
+        Optional<UserEntity> userEntity = userRepo.findByIdAndUserStatus(userId, ActiveStatus.ACTIVE);
+        if (userEntity.isPresent()){
+            flag=true;
+        }
+        return flag;
     }
 
     public boolean taskUserIdValidation(Integer userId) {
@@ -177,5 +175,69 @@ public class Validation {
             throw new UserNotFoundException("Assigner id is not valid");
         }
         return null;
+    }
+
+    public boolean taskTaskIdAndUserValidationAndStatus(Integer taskId, Integer userId) {
+        boolean flag=false;
+        Optional<TaskEntity> taskEntity = taskRepo.findByIdAndUserIdAndActiveStatus(taskId,userRepo.findById(userId).get(), ActiveStatus.ACTIVE);
+        if (taskEntity.isPresent()){
+            flag=true;
+        }
+        return flag;
+    }
+
+    public void subTaskViewValidation(Integer taskId) throws UserNotFoundException {
+        if (taskId != null) {
+            Optional<TaskEntity> taskEntity = taskRepo.findByIdAndActiveStatus(taskId, ActiveStatus.ACTIVE);
+            if (taskEntity.isEmpty())
+                throw new UserNotFoundException("Invalid task id ");
+        }
+    }
+
+    public TaskEntity subTaskExistValidationByUserIdAndTaskIdAndId(Integer taskId,Integer userId,Integer subTaskId) throws CommonException{
+        boolean taskId1= taskIdExistValidation(taskId);
+        boolean userId1= taskUserIdValidation(userId);
+        boolean subTaskId1= taskIdExistValidation(subTaskId);
+        if (subTaskId != null && taskId!=null && (taskId1 && userId1 && subTaskId1)){
+            Optional<TaskEntity> taskEntity = taskRepo.findByUserIdAndIdAndParentTaskIdAndActiveStatus(userRepo.findById(userId).get(),subTaskId,taskRepo.findById(taskId).get(),ActiveStatus.ACTIVE);
+            if (taskEntity.isEmpty()) {
+                throw new TaskNotFoundException("The Subtask is not found");
+            } else {
+                return taskEntity.get();
+            }
+        }
+        return null;
+    }
+
+
+    public TaskEntity subTaskExistValidation(Integer taskId, Integer subTaskId) throws CommonException {
+        if (taskId != null && subTaskId != null) {
+            Optional<TaskEntity> taskEntity = taskRepo.findByIdAndParentTaskIdAndActiveStatus(subTaskId,taskRepo.findById(taskId).get(), ActiveStatus.ACTIVE);
+            if (taskEntity.isEmpty()){
+                throw new UserNotFoundException("The Subtask is not found ");
+            } else {
+                return taskEntity.get();
+            }
+        }
+        return null;
+    }
+
+    public boolean subTaskHistoryValidation(Integer subTaskId) {
+        boolean taskHistoryFlag = false;
+        if(subTaskId != null){
+            List<TaskHistoryEntity> taskHistoryEntity = taskHistoryRepo.findByTaskId(taskRepo.findById(subTaskId).get());
+            if (!taskHistoryEntity.isEmpty() && (taskHistoryEntity.get(0).getTaskId().getId().equals(subTaskId))) {
+                taskHistoryFlag = true;
+            }
+        }
+        return taskHistoryFlag;
+    }
+
+
+    public void subTaskReductionChildCount(Integer taskId) {
+        TaskEntity taskEntity = taskRepo.findById(taskId).get();
+        if(taskId != null){
+            taskEntity.setChildCount(taskEntity.getChildCount()-1);
+        }
     }
 }

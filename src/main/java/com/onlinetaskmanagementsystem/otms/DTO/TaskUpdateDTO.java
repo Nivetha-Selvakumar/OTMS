@@ -47,6 +47,10 @@ public class TaskUpdateDTO {
 
     private Integer updatedBy;
 
+    private Integer childCount;
+
+    private Integer parentTaskId;
+
     @NotNull
     private String updatedField;
 

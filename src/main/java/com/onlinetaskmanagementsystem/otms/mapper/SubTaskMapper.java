@@ -9,9 +9,8 @@ import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TaskMapper {
-
-    public TaskEntity taskModelToEntity(TaskDTO taskDTO, TaskEntity taskEntity){
+public class SubTaskMapper {
+    public TaskEntity subTaskModelToEntity(TaskDTO taskDTO, TaskEntity taskEntity){
 
         taskEntity.setTaskTitle(taskDTO.getTaskTitle());
         taskEntity.setTaskDesc(taskDTO.getTaskDesc());
@@ -24,14 +23,12 @@ public class TaskMapper {
         taskEntity.setActiveStatus(ActiveStatus.ACTIVE);
         taskEntity.setCreatedDate(taskDTO.getCreatedDate());
         taskEntity.setUpdatedDate(taskDTO.getUpdatedDate());
-        taskEntity.setParentTaskId(null);
-        taskEntity.setChildCount(null);
 
         return taskEntity;
 
     }
 
-    public TaskDTO taskEntityToModel(TaskEntity taskEntity) {
+    public TaskDTO subTaskEntityToModel(TaskEntity taskEntity) {
         TaskDTO taskDTO=new TaskDTO();
         taskDTO.setUserId(taskEntity.getUserId().getId());
         taskDTO.setTaskTitle(taskEntity.getTaskTitle());
@@ -55,7 +52,7 @@ public class TaskMapper {
         return taskDTO;
     }
 
-    public TaskEntity taskUpdateModelToEntity(TaskUpdateDTO taskUpdateDTO, TaskEntity taskEntity) {
+    public TaskEntity subTaskUpdateModelToEntity(TaskUpdateDTO taskUpdateDTO, TaskEntity taskEntity) {
         taskEntity.setTaskTitle(taskUpdateDTO.getTaskTitle());
         taskEntity.setTaskDesc(taskUpdateDTO.getTaskDesc());
         taskEntity.setPriority(Priority.valueOf(taskUpdateDTO.getPriority()));
@@ -65,7 +62,6 @@ public class TaskMapper {
         taskEntity.setActualStartDate(taskUpdateDTO.getActualStartDate());
         taskEntity.setActualCompletionDate(taskUpdateDTO.getActualCompletionDate());
         taskEntity.setActiveStatus(taskUpdateDTO.getActiveStatus()!=null?taskUpdateDTO.getActiveStatus():taskEntity.getActiveStatus());
-
 
         return  taskEntity;
     }

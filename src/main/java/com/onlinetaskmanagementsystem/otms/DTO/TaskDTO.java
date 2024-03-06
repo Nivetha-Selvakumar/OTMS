@@ -62,6 +62,10 @@ public class TaskDTO {
 
     private Timestamp updatedDate;
 
+    private Integer childCount;
+
+    private Integer parentTaskId;
+
     public Integer getUserId() {
         return userId;
     }
@@ -186,5 +190,19 @@ public class TaskDTO {
 
     public void setUpdatedDate(Timestamp updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public Integer getChildCount() {
+        return childCount;
+    }
+    public void setChildCount(Integer childCount) {
+        this.childCount = childCount;
+    }
+
+    public Integer getParentTaskId() {
+        return parentTaskId;
+    }
+    public void setParentTaskId(Integer parentTaskId) {
+        this.parentTaskId = parentTaskId;
     }
 }

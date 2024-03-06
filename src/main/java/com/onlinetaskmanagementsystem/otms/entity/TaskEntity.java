@@ -76,9 +76,6 @@ public class TaskEntity {
     @JoinColumn(name = "updated_by",nullable = false)
     private UserEntity updatedBy;
 
-    @OneToMany(mappedBy = "taskId")
-    List<TaskHistoryEntity> taskHistoryEntity;
-
     @Column(name = "created_date", nullable = false)
     @CreationTimestamp
     private Timestamp createdDate;
@@ -87,6 +84,17 @@ public class TaskEntity {
     @UpdateTimestamp
     private Timestamp updatedDate;
 
+    @Column(name = "child_count")
+    private Integer childCount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_task_id")
+    private TaskEntity parentTaskId;
+
+    @OneToMany(mappedBy = "taskId")
+    List<TaskHistoryEntity> taskHistoryEntity;
+
+    @OneToMany(mappedBy = "parentTaskId")
+    List<TaskEntity> taskEntityList;
 
 }
