@@ -1,5 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.controller;
 
+import com.onlinetaskmanagementsystem.otms.DTO.FilterTask;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
@@ -21,21 +22,21 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping(path="/list")
-    public ResponseEntity<List<TaskDTO>> listTask(@RequestParam Integer userId) throws CommonException{
-        return new ResponseEntity<>(taskService.viewList(userId),HttpStatus.OK);
+    @GetMapping(path="/list/{userId}")
+    public ResponseEntity<List<TaskDTO>> listTask(@PathVariable("userId") Integer userId , FilterTask filterTask) throws CommonException{
+        return new ResponseEntity<>(taskService.viewList(userId, filterTask),HttpStatus.OK);
     }
 
     @PostMapping(path="/create")
-    public ResponseEntity<String> createTask(@RequestBody @Valid TaskDTO taskDTO)throws CommonException {
-        Integer id= taskService.addTask(taskDTO);
+    public ResponseEntity<String> createTask(@RequestParam Integer userId, @RequestBody @Valid TaskDTO taskDTO)throws CommonException {
+        Integer id= taskService.addTask(userId, taskDTO);
         String responseMsg="Successfully Registered!\nYour TaskId: "+id;
         return new ResponseEntity<>(responseMsg, HttpStatus.CREATED);
     }
 
     @PutMapping(path="/update/{taskId}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable("taskId") Integer taskId, @RequestBody @Valid TaskUpdateDTO taskUpdateDTO) throws  CommonException{
-        return new ResponseEntity<>(taskService.viewUpdatedTask(taskId, taskUpdateDTO),HttpStatus.OK);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable("taskId") Integer taskId,@RequestParam Integer userId, @RequestBody @Valid TaskUpdateDTO taskUpdateDTO) throws  CommonException{
+        return new ResponseEntity<>(taskService.viewUpdatedTask(taskId, userId, taskUpdateDTO),HttpStatus.OK);
     }
 
     @DeleteMapping(path="/delete/{taskId}")

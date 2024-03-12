@@ -1,5 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.service.impl;
 
+import com.onlinetaskmanagementsystem.otms.DTO.FilterTask;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
@@ -9,6 +10,7 @@ import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
+import com.onlinetaskmanagementsystem.otms.Utils.AppConstant;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //@Component
 @Service
@@ -51,7 +54,7 @@ public class TaskImpl implements TaskService {
 
 
     @Override
-    public Integer addTask(TaskDTO taskDTO) throws CommonException {
+    public Integer addTask(Integer userId, TaskDTO taskDTO) throws CommonException {
         //validate user and get user entity
         //optional entity is present okay else throw
         //Then Validate User, Task Title and Task Status same is present okay else throw
@@ -63,18 +66,18 @@ public class TaskImpl implements TaskService {
         ids.put(TaskIds.ASSIGNEEID.toString(), taskDTO.getAssigneeId());
         ids.put(TaskIds.ASSIGNERID.toString(), taskDTO.getAssignerId());
 
-        if(validation.taskUserIdValidation(taskDTO.getUserId())){
-            if(validation.taskUserValidationAndStatus(taskDTO.getUserId())){
-                if (validation.taskTitleValidation(taskDTO.getTaskTitle())&& validation.taskUserIdAndTaskTitleValidation(taskDTO.getUserId(), taskDTO.getTaskTitle())) {
+        if(validation.taskUserIdValidation(userId)){
+            if(validation.taskUserValidationAndStatus(userId)){
+                if (validation.taskTitleValidation(taskDTO.getTaskTitle())&& validation.taskUserIdAndTaskTitleValidation(userId, taskDTO.getTaskTitle())) {
                     throw new TaskCreationException("This task is already present for this user");
                 } else {
                     //                    Check if all the given user Ids present in the user table or not
 
                     TaskEntity taskEntity = new TaskEntity();
 
-                    taskEntity.setUserId(userRepo.findById(taskDTO.getUserId()).get());
+                    taskEntity.setUserId(userRepo.findById(userId).get());
 
-                    UserEntity userEntity = userRepo.findById(taskDTO.getUserId()).orElseThrow(()->new UserNotFoundException("User not found with id"));
+                    UserEntity userEntity = userRepo.findById(userId).orElseThrow(()->new UserNotFoundException("User not found with id"));
                     taskEntity.setCreatedBy(userEntity);
                     taskEntity.setUpdatedBy(userEntity);
 
@@ -97,28 +100,40 @@ public class TaskImpl implements TaskService {
         }
     }
 
-
     @Override
-    public List<TaskDTO> viewList(Integer userId) throws CommonException{
+    public List<TaskDTO> viewList(Integer userId, FilterTask filterTask) throws UserNotFoundException {
 
         validation.taskViewValidation(userId);
+        List<TaskEntity> taskEntities;
+        if(!filterTask.getEmpFilterType().equals(AppConstant.ALL)) {
 
-        List<TaskEntity> taskEntities= taskRepo.findAllByUserId(userRepo.findById(userId).get());
+        List<UserEntity> userEntityList = filterTask.getUserId().stream()
+                .map(id -> {
+                       UserEntity user = new UserEntity();
+                        user.setId(id);
+                        return user;
+                    })
+                    .collect(Collectors.toList());
+
+            taskEntities = taskRepo.findAllByUserIdInAndActiveStatus(userEntityList,ActiveStatus.ACTIVE);
+        }else{
+            taskEntities = taskRepo.findAllByActiveStatus(ActiveStatus.ACTIVE);
+        }
         List<TaskDTO> taskDTOList = new ArrayList<>();
-            for (TaskEntity taskEntity : taskEntities) {
-                taskDTOList.add(taskMapper.taskEntityToModel(taskEntity));
-            }
-            return taskDTOList;
+        for (TaskEntity taskEntity : taskEntities) {
+            taskDTOList.add(taskMapper.taskEntityToModel(taskEntity));
+        }
+        return taskDTOList;
     }
 
     @Override
-    public TaskDTO viewUpdatedTask(Integer taskId, TaskUpdateDTO taskUpdateDTO) throws CommonException {
+    public TaskDTO viewUpdatedTask(Integer taskId, Integer userId, TaskUpdateDTO taskUpdateDTO) throws CommonException {
         Map<String, Integer> ids = new HashMap<>();
 
         ids.put(TaskIds.ASSIGNEEID.toString(), taskUpdateDTO.getAssigneeId());
         ids.put(TaskIds.ASSIGNERID.toString(), taskUpdateDTO.getAssignerId());
         TaskEntity taskEntity = validation.taskExistValidation(taskId);
-        UserEntity userEntity = userRepo.findById(taskUpdateDTO.getUserId()).orElseThrow(()->new UserNotFoundException("User not found with id"));
+        UserEntity userEntity = userRepo.findById(userId).orElseThrow(()->new UserNotFoundException("User not found with id"));
         taskEntity.setUpdatedBy(userEntity);
 
         userEntity = userRepo.findById(taskUpdateDTO.getAssigneeId()).orElse(validation.validatedUserIds(ids)) ;
@@ -156,4 +171,6 @@ public class TaskImpl implements TaskService {
             return taskHistoryDTOList;
         } else throw new UserNotFoundException("The user is not found");
     }
+
+
 }

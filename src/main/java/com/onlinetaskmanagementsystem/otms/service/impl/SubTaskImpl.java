@@ -23,7 +23,10 @@ import com.onlinetaskmanagementsystem.otms.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SubTaskImpl implements SubTaskService {
@@ -53,8 +56,7 @@ public class SubTaskImpl implements SubTaskService {
     public List<TaskDTO> viewSubList(Integer taskId, Integer userId) throws CommonException {
         validation.taskViewValidation(userId);
         validation.subTaskViewValidation(taskId);
-
-        List<TaskEntity> taskEntities= taskRepo.findAllByUserIdAndParentTaskId(userRepo.findById(userId).get(),taskRepo.findById(taskId).get());
+        List<TaskEntity> taskEntities= taskRepo.findAllByUserIdAndParentTaskIdAndActiveStatus(userRepo.findById(userId).get(),taskRepo.findById(taskId).get(),ActiveStatus.ACTIVE);
         List<TaskDTO> taskDTOList = new ArrayList<>();
         for (TaskEntity taskEntity : taskEntities) {
             taskDTOList.add(subTaskMapper.subTaskEntityToModel(taskEntity));

@@ -33,16 +33,19 @@ public interface TaskRepo extends JpaRepository<TaskEntity,Integer> {
 
     List<TaskEntity> findAllByAssigneeIdAndPlannedCompletionDateAndActiveStatus(UserEntity user, Date dueDate, ActiveStatus activeStatus);
 
-
     // Sub task
     Optional<TaskEntity> findByIdAndUserIdAndActiveStatus(Integer taskId, UserEntity userId, ActiveStatus activeStatus);
 
-
-    List<TaskEntity> findAllByUserIdAndParentTaskId(UserEntity userEntity, TaskEntity taskId);
-
+    List<TaskEntity> findAllByUserIdAndParentTaskIdAndActiveStatus(UserEntity userEntity, TaskEntity taskEntity, ActiveStatus activeStatus);
 
     Optional<TaskEntity> findByUserIdAndIdAndParentTaskIdAndActiveStatus(UserEntity userEntity, Integer subTaskId, TaskEntity taskEntity, ActiveStatus activeStatus);
 
 
     Optional<TaskEntity> findByIdAndParentTaskIdAndActiveStatus(Integer subTaskId, TaskEntity taskEntity, ActiveStatus activeStatus);
+
+
+    List<TaskEntity> findAllByUserIdInAndActiveStatus(List<UserEntity> userEntityList, ActiveStatus activeStatus);
+
+    List<TaskEntity> findAllByActiveStatus(ActiveStatus activeStatus);
+
 }

@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @Data
 @Component
 public class TaskDTO {
-    @NotNull(message = "Enter User id")
+
     private Integer userId;
 
     @NotBlank(message = "Enter Task title")
@@ -29,21 +29,16 @@ public class TaskDTO {
 
     private Priority priority;
 
-    //    @NotBlank(message = "Enter the Task status as Progress, Completed or Not yet started ")
-
     private TaskStatus taskStatus;
 
     @NotNull(message = "Enter the Planned start date")
-    //   @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",message = "Invalid timestamp format. Use the format: yyyy-MM-ddTHH:mm:ss")
+
     private Timestamp plannedStartDate;
 
-    //    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",message = "Invalid timestamp format. Use the format: yyyy-MM-ddTHH:mm:ss")
     private Timestamp plannedCompletionDate;
 
-    //    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",message = "Invalid timestamp format. Use the format: yyyy-MM-ddTHH:mm:ss")
     private Timestamp actualStartDate;
 
-    //    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",message = "Invalid timestamp format. Use the format: yyyy-MM-ddTHH:mm:ss")
     private Timestamp actualCompletionDate;
 
     private ActiveStatus activeStatus;

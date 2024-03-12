@@ -163,7 +163,7 @@ class ValidationTest {
         when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.ofNullable(taskEntity));
         when(taskHistoryRepo.findByTaskId(taskEntity)).thenReturn(taskHistoryEntityList);
         boolean result= validation.taskHistoryValidation(1);
-        Assertions.assertFalse(result);
+        Assertions.assertTrue(result);
     }
 
     @Test

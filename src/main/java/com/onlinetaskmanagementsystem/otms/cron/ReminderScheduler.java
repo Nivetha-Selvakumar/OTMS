@@ -12,7 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.sql.Struct;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;

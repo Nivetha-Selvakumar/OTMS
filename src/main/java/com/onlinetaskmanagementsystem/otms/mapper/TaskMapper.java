@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 public class TaskMapper {
 
     public TaskEntity taskModelToEntity(TaskDTO taskDTO, TaskEntity taskEntity){
-
         taskEntity.setTaskTitle(taskDTO.getTaskTitle());
         taskEntity.setTaskDesc(taskDTO.getTaskDesc());
         taskEntity.setPriority(Priority.HIGH);

@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.controller;
 
 
+import com.onlinetaskmanagementsystem.otms.DTO.FilterTask;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
@@ -30,6 +31,8 @@ class TaskControllerTest {
 
     TaskHistoryDTO taskHistoryDTO=new TaskHistoryDTO();
 
+    FilterTask filterTask= new FilterTask();
+
 
     TaskDTO taskDTO = new TaskDTO();
 
@@ -38,22 +41,22 @@ class TaskControllerTest {
         TaskDTO taskDTO1=new TaskDTO();
         TaskDTO taskDTO2 = new TaskDTO();
         List<TaskDTO> taskDTOList = Arrays.asList(taskDTO1,taskDTO2);
-        when(taskService.viewList(taskDTO.getUserId())).thenReturn(taskDTOList);
-        List<TaskDTO> response = taskController.listTask(taskDTO.getUserId()).getBody();
+        when(taskService.viewList(taskDTO.getUserId(),filterTask)).thenReturn(taskDTOList);
+        List<TaskDTO> response = taskController.listTask(taskDTO.getUserId(),filterTask).getBody();
         Assertions.assertEquals(taskDTOList,response);
     }
 
     @Test
     void createTaskTest() throws CommonException{
-        when(taskService.addTask(taskDTO)).thenReturn(1);
-        ResponseEntity<String> response= taskController.createTask(taskDTO);
+        when(taskService.addTask(taskDTO.getUserId(), taskDTO)).thenReturn(1);
+        ResponseEntity<String> response= taskController.createTask(taskDTO.getUserId(), taskDTO);
         Assertions.assertEquals("Successfully Registered!\nYour TaskId: 1",response.getBody());
     }
 
     @Test
     void updateTaskTest() throws CommonException{
-        when(taskService.viewUpdatedTask(taskHistoryDTO.getTaskId(), new TaskUpdateDTO())).thenReturn(taskDTO);
-        TaskDTO response= taskController.updateTask(taskHistoryDTO.getTaskId(),new TaskUpdateDTO()).getBody();
+        when(taskService.viewUpdatedTask(taskHistoryDTO.getTaskId(),taskDTO.getUserId(), new TaskUpdateDTO())).thenReturn(taskDTO);
+        TaskDTO response= taskController.updateTask(taskHistoryDTO.getTaskId(),taskDTO.getUserId(), new TaskUpdateDTO()).getBody();
         Assertions.assertEquals(taskDTO,response);
     }
 

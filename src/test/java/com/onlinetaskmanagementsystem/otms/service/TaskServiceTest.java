@@ -1,5 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.service;
 
+import com.onlinetaskmanagementsystem.otms.DTO.FilterTask;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskUpdateDTO;
@@ -7,6 +8,7 @@ import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Enum.Priority;
 import com.onlinetaskmanagementsystem.otms.Enum.TaskStatus;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
+import com.onlinetaskmanagementsystem.otms.Utils.AppConstant;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
@@ -26,16 +28,19 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.validation.constraints.Min;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class  TestServiceTest {
+class TaskServiceTest {
     @InjectMocks
     TaskImpl taskImpl;
 
@@ -57,6 +62,7 @@ class  TestServiceTest {
     Validation validation;
 
     TaskDTO taskDTO= new TaskDTO();
+
     TaskEntity taskEntity = new TaskEntity();
 
     UserEntity userEntity = new UserEntity();
@@ -70,6 +76,14 @@ class  TestServiceTest {
     List<TaskHistoryEntity> taskHistoryEntityList = new ArrayList<>();
 
     TaskUpdateDTO taskUpdateDTO = new TaskUpdateDTO();
+
+    FilterTask filterTask = new FilterTask();
+
+    List<FilterTask> filterTasks = new ArrayList<>();
+
+    List<TaskDTO> taskDTOList = new ArrayList<>();
+
+
     @BeforeEach
     void init(){
         userEntity.setId(1);
@@ -96,13 +110,25 @@ class  TestServiceTest {
         taskEntity.setCreatedBy(userEntity);
         taskEntity.setUpdatedBy(userEntity);
 
+
+        filterTask.setEmpFilterType(AppConstant.ALL);
+
+
+        filterTasks.add(filterTask);
+        filterTasks.add(filterTask);
+
         taskEntityList.add(taskEntity);
         taskEntityList.add(taskEntity);
+
+        taskDTOList.add(taskDTO);
+        taskDTOList.add(taskDTO);
 
         taskHistoryEntityList.add(taskHistoryEntity);
         taskHistoryEntityList.add(taskHistoryEntity);
 
         taskHistoryDTO.setTaskId(taskEntity.getId());
+
+
 
 
     }
@@ -113,7 +139,7 @@ class  TestServiceTest {
         when(validation.taskTitleValidation(taskDTO.getTaskTitle())).thenReturn(true);
         when(validation.taskUserIdAndTaskTitleValidation(taskDTO.getUserId(),taskDTO.getTaskTitle())).thenReturn(true);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            taskImpl.addTask(taskDTO);
+            taskImpl.addTask(taskDTO.getUserId(),taskDTO);
         });
         String expectedMessage = "This task is already present for this user";
         String actualMessage=commonException.getMessage();
@@ -124,7 +150,7 @@ class  TestServiceTest {
     void addTaskTest2() {
         when(validation.taskUserIdValidation(taskDTO.getUserId())).thenReturn(false);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            taskImpl.addTask(taskDTO);
+            taskImpl.addTask(taskDTO.getUserId(),taskDTO);
         });
         String expectedMessage = "No User is Found";
         String actualMessage=commonException.getMessage();
@@ -136,7 +162,7 @@ class  TestServiceTest {
         when(validation.taskUserIdValidation(taskDTO.getUserId())).thenReturn(true);
         when(validation.taskUserValidationAndStatus(taskDTO.getUserId())).thenReturn(false);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            taskImpl.addTask(taskDTO);
+            taskImpl.addTask(taskDTO.getUserId(),taskDTO);
         });
         String expectedMessage = "User is not active";
         String actualMessage=commonException.getMessage();
@@ -154,17 +180,32 @@ class  TestServiceTest {
         when(taskMapper.taskModelToEntity(Mockito.any(),Mockito.any())).thenReturn(taskEntity);
         when(taskRepo.save(taskEntity)).thenReturn(taskEntity);
         when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity,"Created")).thenReturn(new TaskHistoryEntity());
-        Integer response = taskImpl.addTask(taskDTO);
+        Integer response = taskImpl.addTask(taskDTO.getUserId(),taskDTO);
         Assertions.assertEquals(taskEntity.getId(),response);
     }
 
     @Test
     void viewListTaskTest1() throws  CommonException{
-        when(userRepo.findById(taskDTO.getUserId())).thenReturn(Optional.ofNullable(userEntity));
-        when(taskRepo.findAllByUserId(userEntity)).thenReturn(taskEntityList);
+        when(taskRepo.findAllByActiveStatus(ActiveStatus.ACTIVE)).thenReturn(taskEntityList);
         when(taskMapper.taskEntityToModel(Mockito.any())).thenReturn(taskDTO);
-        List<TaskDTO> actual = taskImpl.viewList(taskDTO.getUserId());
-        Assertions.assertEquals(taskEntityList.size(),actual.size());
+        List<TaskDTO> actual = taskImpl.viewList(taskDTO.getUserId(),filterTask);
+        Assertions.assertEquals(taskDTOList.size(),actual.size());
+
+    }
+
+    @Test
+    void viewListTaskTest2() throws CommonException{
+        List<Integer> userId = new ArrayList<>();
+        userId.add(1);
+        userId.add(2);
+        filterTask.setUserId(userId);
+        filterTask.setEmpFilterType(AppConstant.NOT_ALL);
+        when(taskRepo.findAllByUserIdInAndActiveStatus(anyList(),eq(ActiveStatus.ACTIVE))).thenReturn(taskEntityList);
+        when(taskMapper.taskEntityToModel(Mockito.any())).thenReturn(taskDTO);
+        List<TaskDTO> actual = taskImpl.viewList(taskDTO.getUserId(),filterTask);
+        Assertions.assertEquals(taskDTOList.size(),actual.size());
+
+
 
     }
 
@@ -175,7 +216,7 @@ class  TestServiceTest {
         when(userRepo.findById(taskUpdateDTO.getUserId())).thenReturn(Optional.ofNullable(userEntity));
         when(taskRepo.save(taskMapper.taskUpdateModelToEntity(taskUpdateDTO,taskEntity))).thenReturn(taskEntity);
         when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity, taskUpdateDTO.getUpdatedField())).thenReturn(taskHistoryEntity);
-        TaskDTO actual = taskImpl.viewUpdatedTask(taskHistoryDTO.getTaskId(), taskUpdateDTO);
+        TaskDTO actual = taskImpl.viewUpdatedTask(taskHistoryDTO.getTaskId(), taskHistoryDTO.getCreatedBy(), taskUpdateDTO);
         Assertions.assertEquals(taskMapper.taskEntityToModel(taskEntity),actual);
     }
 
