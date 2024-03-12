@@ -67,6 +67,7 @@ class ValidationTest {
         taskEntityList.add(taskEntity);
         taskDTO.setActiveStatus(ActiveStatus.valueOf("ACTIVE"));
         userDTO.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
+        taskDTO.setParentTaskId(1);
         taskHistoryDTO.setTaskId(1);
         taskHistoryEntity.setTaskId(taskEntity);
         taskHistoryEntityList.add(taskHistoryEntity);
@@ -108,7 +109,7 @@ class ValidationTest {
         validation.taskViewValidation(taskDTO.getUserId());
     }
     @Test
-    void taskViewValidationTest2()  throws CommonException  {
+    void taskViewValidationTest2() {
         when(userRepo.findByIdAndUserStatus(taskDTO.getUserId(),userDTO.getUserStatus())).thenReturn(Optional.empty());
         assertThrows(CommonException.class,() -> {
             validation.taskViewValidation(1);
@@ -132,7 +133,7 @@ class ValidationTest {
     @Test
     void taskExistValidationTest3() throws TaskNotFoundException {
         TaskEntity taskEntity1 = validation.taskExistValidation(null);
-        assertEquals(null,taskEntity1);
+        Assertions.assertNull(taskEntity1);
     }
 
     @Test
@@ -199,7 +200,7 @@ class ValidationTest {
     void taskUserIdValidationTest2(){
         when(userRepo.findById(userEntity.getId())).thenReturn(Optional.empty());
         boolean result = validation.taskUserIdValidation(taskDTO.getUserId());
-        assertFalse(result);
+        Assertions.assertFalse(result);
     }
 
     @Test
@@ -245,8 +246,85 @@ class ValidationTest {
 
         UserEntity result = validation.validatedUserIds(ids);
 
-        assertNull(result);
+        Assertions.assertNull(result);
 
     }
+
+    @Test
+    void taskTaskIdAndUserValidationAndStatusTest(){
+        when(userRepo.findById(taskDTO.getUserId())).thenReturn(Optional.of(userEntity));
+        when(taskRepo.findByIdAndUserIdAndActiveStatus(taskDTO.getParentTaskId(),userEntity,ActiveStatus.ACTIVE)).thenReturn(Optional.of(taskEntity));
+        boolean response = validation.taskTaskIdAndUserValidationAndStatus(taskDTO.getParentTaskId(),taskDTO.getUserId());
+        Assertions.assertTrue(response);
+    }
+
+    @Test
+    void subTaskViewValidationTest1() {
+        when(taskRepo.findByIdAndActiveStatus(taskHistoryDTO.getTaskId(),taskDTO.getActiveStatus())).thenReturn(Optional.empty());
+        assertThrows(CommonException.class,() -> {
+            validation.subTaskViewValidation(taskDTO.getParentTaskId());
+        });
+    }
+
+    @Test
+    void subTaskExistValidationByUserIdAndTaskIdAndIdTest1(){
+        when(userRepo.findById(taskDTO.getUserId())).thenReturn(Optional.ofNullable(userEntity));
+        when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.ofNullable(taskEntity));
+        when(taskRepo.findByUserIdAndIdAndParentTaskIdAndActiveStatus(userEntity, taskHistoryDTO.getTaskId(), taskEntity,taskDTO.getActiveStatus())).thenReturn(Optional.empty());
+        assertThrows(CommonException.class,() -> {
+            validation.subTaskExistValidationByUserIdAndTaskIdAndId(taskDTO.getParentTaskId(),taskDTO.getUserId(),1);
+        });
+    }
+
+    @Test
+    void subTaskExistValidationByUserIdAndTaskIdAndIdTest2() throws CommonException {
+        when(userRepo.findById(taskDTO.getUserId())).thenReturn(Optional.ofNullable(userEntity));
+        when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.ofNullable(taskEntity));
+        when(taskRepo.findByUserIdAndIdAndParentTaskIdAndActiveStatus(userEntity, taskHistoryDTO.getTaskId(), taskEntity,taskDTO.getActiveStatus())).thenReturn(Optional.of(taskEntity));
+        validation.subTaskExistValidationByUserIdAndTaskIdAndId(taskDTO.getParentTaskId(),taskDTO.getUserId(),1);
+    }
+
+    @Test
+    void subTaskExistValidationByUserIdAndTaskIdAndIdTest3() throws CommonException {
+        taskEntity.setParentTaskId(null);
+        validation.subTaskExistValidationByUserIdAndTaskIdAndId(taskDTO.getParentTaskId(),null,1);
+    }
+
+    @Test
+    void subTaskExistValidationTest1(){
+        when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.of(taskEntity));
+        when(taskRepo.findByIdAndParentTaskIdAndActiveStatus(taskHistoryDTO.getTaskId(), taskEntity,ActiveStatus.ACTIVE)).thenReturn(Optional.empty());
+        assertThrows(CommonException.class,() -> {
+            validation.subTaskExistValidation(taskDTO.getParentTaskId(),1);
+        });
+    }
+    @Test
+    void subTaskExistValidationTest2() throws CommonException {
+        when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.of(taskEntity));
+        when(taskRepo.findByIdAndParentTaskIdAndActiveStatus(taskHistoryDTO.getTaskId(), taskEntity,ActiveStatus.ACTIVE)).thenReturn(Optional.of(taskEntity));
+        validation.subTaskExistValidation(taskDTO.getParentTaskId(),1);
+    }
+
+    @Test
+    void subTaskExistValidationTest3() throws CommonException {
+        taskEntity.setParentTaskId(null);
+        validation.subTaskExistValidation(taskDTO.getParentTaskId(),null);
+    }
+
+    @Test
+    void subTaskHistoryValidationTest(){
+        when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.ofNullable(taskEntity));
+        when(taskHistoryRepo.findByTaskId(taskEntity)).thenReturn(taskHistoryEntityList);
+        Assertions.assertTrue(validation.subTaskHistoryValidation(taskHistoryDTO.getTaskId()));
+    }
+
+    @Test
+    void subTaskReductionChildCount(){
+        taskEntity.setChildCount(3);
+        when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.of(taskEntity));
+        validation.subTaskReductionChildCount(taskHistoryDTO.getTaskId());
+    }
+
+
 
 }
