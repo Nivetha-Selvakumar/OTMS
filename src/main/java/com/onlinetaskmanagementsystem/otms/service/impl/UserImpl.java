@@ -8,6 +8,8 @@ import com.onlinetaskmanagementsystem.otms.Exception.UserCreationException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserCredentialException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
+import com.onlinetaskmanagementsystem.otms.entity.RoleEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.mapper.UserMapper;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
@@ -35,25 +37,27 @@ public class UserImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public SignUpResponse addUser(UserDTO userDTO) throws UserCreationException {
+    public SignUpResponse addUser(UserDTO userDTO, String orgRef) throws CommonException {
 
-            UserEntity userEntity = userMapper.userModelToEntity(userDTO);
-            if (validation.checkExistEmail(userDTO.getEmail())) {
-                throw new UserCreationException("User already exist. Try with other email !");
-            } else if (validation.checkExistUser(userDTO.getUsername().trim())) {
-                throw new UserCreationException("User already exist. Try with other username !");
-            } else {
-                return userMapper.mapToSignUpModel(userRepo.save(userEntity));
-            }
+        OrganisationEntity organisationEntity = validation.orgRefValidation(orgRef);
+        if (validation.checkExistEmail(userDTO.getEmail())) {
+            throw new UserCreationException("User already exist. Try with other email !");
+        } else if (validation.checkExistUser(userDTO.getUsername().trim())) {
+            throw new UserCreationException("User already exist. Try with other username !");
+        } else {
+            RoleEntity roleEntity = validation.userRoleValidation(userDTO.getRoleId());
+            UserEntity userEntity= userMapper.userModelToEntity(userDTO,organisationEntity,roleEntity);
+            return userMapper.mapToSignUpModel(userRepo.save(userEntity));
+        }
     }
 
     @Override
-    public UserDTO signInUser(@Valid SignInDTO signInDTO) throws CommonException {
-
+    public UserDTO signInUser(@Valid SignInDTO signInDTO , String orgRef) throws CommonException {
+        OrganisationEntity organisationEntity = validation.orgRefValidation(orgRef);
 //        Verifying the user credentials to signin
         if (validation.checkExistEmail(signInDTO.getEmail())) {
-            UserEntity userEntity = userRepo.getUserRecord(signInDTO.getEmail());
-            if (userEntity.getPassword().equals(signInDTO.getPassword())) {
+            if (validation.checkPassword(signInDTO.getEmail(),signInDTO.getPassword())) {
+                UserEntity userEntity = userRepo.findByEmailAndPasswordAndOrgId(signInDTO.getEmail(), signInDTO.getPassword(),organisationEntity);
                 return userMapper.userEntityToModel(userEntity);
             } else {
                 throw new UserCredentialException("Password Mismatched");

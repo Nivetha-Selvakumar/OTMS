@@ -1,6 +1,7 @@
 package com.onlinetaskmanagementsystem.otms.mapper;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
@@ -30,6 +31,8 @@ class TaskHistoryMapperTest {
 
     TaskHistoryDTO taskHistoryDTO= new TaskHistoryDTO();
 
+    OrganisationEntity organisationEntity = new OrganisationEntity();
+
     @BeforeEach
     void init(){
 
@@ -55,13 +58,13 @@ class TaskHistoryMapperTest {
 
     @Test
     void taskHistoryModelToEntityTest1(){
-        taskHistoryMapper.taskHistoryModelToEntity(taskEntity,"Created");
+        taskHistoryMapper.taskHistoryModelToEntity(taskEntity,organisationEntity, "Created");
 
     }
     @Test
     void taskHistoryModelToEntityTest(){
         String expected = "Created for testing";
-        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, expected);
+        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, organisationEntity, expected);
         Assertions.assertNotNull(taskHistoryEntity);
         Assertions.assertEquals(taskEntity.getCreatedDate(), taskHistoryEntity.getCreatedDate());
         Assertions.assertEquals(expected, taskHistoryEntity.getDescription());

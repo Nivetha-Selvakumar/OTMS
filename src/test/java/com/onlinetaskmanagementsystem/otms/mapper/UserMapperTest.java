@@ -3,6 +3,8 @@ package com.onlinetaskmanagementsystem.otms.mapper;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
+import com.onlinetaskmanagementsystem.otms.entity.RoleEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +26,14 @@ class UserMapperTest {
 
     SignUpResponse signUpResponse = new SignUpResponse();
 
+    OrganisationEntity organisationEntity = new OrganisationEntity();
+
+    RoleEntity roleEntity = new RoleEntity();
+
+
     @BeforeEach
     void init(){
 
-//        userEntity.setOrgId(1);
-//        userEntity.setRoleId(1);
         userEntity.setEmpCode("111");
         userEntity.setEmpName("nivetha");
         userEntity.setUsername("nive");
@@ -38,9 +43,6 @@ class UserMapperTest {
         userEntity.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
 
 
-
-//        userDTO.setOrgId(1);
-//        userDTO.setRoleId(1);
         userDTO.setEmpCode("111");
         userDTO.setEmpName("nivetha");
         userDTO.setUsername("nive");
@@ -48,7 +50,6 @@ class UserMapperTest {
         userDTO.setPassword("nive");
         userDTO.setRegistrationDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         userDTO.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
-//        userDTO.setCreatedDate(Timestamp.valueOf("2024-01-02 12:30:40"));
         signUpResponse.setMessage("Successfully Registered!");
         signUpResponse.setUserId("Your UserId: "+userEntity.getId());
     }
@@ -56,16 +57,13 @@ class UserMapperTest {
 
     @Test
     void userModelToEntityTest(){
-        UserEntity userEntity1 = userMapper.userModelToEntity(userDTO);
-//        Assertions.assertEquals(userEntity.getOrgId(), userEntity1.getOrgId());
-//        Assertions.assertEquals(userEntity.getRoleId(),userEntity1.getRoleId());
+        UserEntity userEntity1 = userMapper.userModelToEntity(userDTO, organisationEntity,roleEntity);
         Assertions.assertEquals(userEntity.getEmpCode(),userEntity1.getEmpCode());
         Assertions.assertEquals(userEntity.getEmpName(),userEntity1.getEmpName());
         Assertions.assertEquals(userEntity.getUsername(),userEntity1.getUsername());
         Assertions.assertEquals(userEntity.getEmail(),userEntity1.getEmail());
         Assertions.assertEquals(userEntity.getPassword(),userEntity1.getPassword());
         Assertions.assertEquals(userEntity.getRegistrationDate(),userEntity1.getRegistrationDate());
-//        Assertions.assertEquals(userEntity.getCreatedDate(),userEntity1.getCreatedDate());
 
 
     }
@@ -73,15 +71,12 @@ class UserMapperTest {
     @Test
     void userEntityToModelTest(){
         UserDTO userDTO1 = userMapper.userEntityToModel(userEntity);
-//        Assertions.assertEquals(userDTO.getOrgId(),userDTO1.getOrgId());
-//        Assertions.assertEquals(userDTO.getRoleId(),userDTO1.getRoleId());
         Assertions.assertEquals(userDTO.getEmpCode(),userDTO1.getEmpCode());
         Assertions.assertEquals(userDTO.getEmpName(),userDTO1.getEmpName());
         Assertions.assertEquals(userDTO.getUsername(),userDTO1.getUsername());
         Assertions.assertEquals(userDTO.getEmail(),userDTO1.getEmail());
         Assertions.assertEquals(userDTO.getPassword(),userDTO1.getPassword());
         Assertions.assertEquals(userDTO.getRegistrationDate(),userDTO1.getRegistrationDate());
-//        Assertions.assertEquals(userDTO.getCreatedDate(),userDTO1.getCreatedDate());
 
     }
 

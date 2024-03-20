@@ -9,6 +9,7 @@ import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
@@ -53,7 +54,8 @@ public class SubTaskImpl implements SubTaskService {
 
 
     @Override
-    public List<TaskDTO> viewSubList(Integer taskId, Integer userId) throws CommonException {
+    public List<TaskDTO> viewSubList(Integer taskId, Integer userId, String orgRef) throws CommonException {
+        validation.orgRefValidation(orgRef);
         validation.taskViewValidation(userId);
         validation.subTaskViewValidation(taskId);
         List<TaskEntity> taskEntities= taskRepo.findAllByUserIdAndParentTaskIdAndActiveStatus(userRepo.findById(userId).get(),taskRepo.findById(taskId).get(),ActiveStatus.ACTIVE);
@@ -65,13 +67,14 @@ public class SubTaskImpl implements SubTaskService {
     }
 
     @Override
-    public Integer addSubTask(TaskDTO taskDTO,Integer taskId) throws CommonException {
+    public Integer addSubTask(TaskDTO taskDTO,Integer taskId, String orgRef) throws CommonException {
 
         Map<String, Integer> ids = new HashMap<>();
 
         ids.put(TaskIds.ASSIGNEEID.toString(), taskDTO.getAssigneeId());
         ids.put(TaskIds.ASSIGNERID.toString(), taskDTO.getAssignerId());
 
+        OrganisationEntity organisationEntity = validation.orgRefValidation(orgRef);
         if(validation.taskUserIdValidation(taskDTO.getUserId())){
             if(validation.taskUserValidationAndStatus(taskDTO.getUserId())){
                 if(validation.taskTaskIdAndUserValidationAndStatus(taskId,taskDTO.getUserId())){
@@ -91,6 +94,7 @@ public class SubTaskImpl implements SubTaskService {
                         TaskEntity taskEntity = new TaskEntity();
                         taskEntity.setUserId(userRepo.findById(taskDTO.getUserId()).get());
 
+                        taskEntity.setOrgId(organisationEntity);
                         // Validating Created by and updated by
                         UserEntity userEntity = userRepo.findById(taskDTO.getUserId()).orElseThrow(()->new UserNotFoundException("User not found with id"));
                         taskEntity.setCreatedBy(userEntity);
@@ -110,7 +114,7 @@ public class SubTaskImpl implements SubTaskService {
                         // Mapping all the elements
                         taskEntity = subTaskMapper.subTaskModelToEntity(taskDTO,taskEntity);
                         taskEntity = taskRepo.save(taskEntity);
-                        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, "Created");
+                        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, organisationEntity, "Created");
                         taskHistoryRepo.save(taskHistoryEntity);
                         return taskEntity.getId();
                     }
@@ -126,12 +130,13 @@ public class SubTaskImpl implements SubTaskService {
     }
 
     @Override
-    public TaskDTO viewUpdatedSubTask(Integer taskId, Integer subTaskId, TaskUpdateDTO taskUpdateDTO) throws CommonException{
+    public TaskDTO viewUpdatedSubTask(Integer taskId, Integer subTaskId, TaskUpdateDTO taskUpdateDTO, String orgRef) throws CommonException{
         Map<String, Integer> ids = new HashMap<>();
 
         ids.put(TaskIds.ASSIGNEEID.toString(), taskUpdateDTO.getAssigneeId());
         ids.put(TaskIds.ASSIGNERID.toString(), taskUpdateDTO.getAssignerId());
 
+        OrganisationEntity organisationEntity = validation.orgRefValidation(orgRef);
         TaskEntity taskEntity = validation.subTaskExistValidation(taskId,subTaskId);
         UserEntity userEntity = userRepo.findById(taskUpdateDTO.getUserId()).orElseThrow(()->new UserNotFoundException("User not found with id"));
         taskEntity.setUpdatedBy(userEntity);
@@ -142,14 +147,15 @@ public class SubTaskImpl implements SubTaskService {
         userEntity = userRepo.findById(taskUpdateDTO.getAssignerId()).orElse(validation.validatedUserIds(ids));
         taskEntity.setAssignerId(userEntity);
         taskEntity=taskRepo.save(subTaskMapper.subTaskUpdateModelToEntity(taskUpdateDTO,taskEntity));
-        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, taskUpdateDTO.getUpdatedField());
+        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity,organisationEntity, taskUpdateDTO.getUpdatedField());
         taskHistoryRepo.save(taskHistoryEntity);
         return subTaskMapper.subTaskEntityToModel(taskEntity);
 
     }
 
     @Override
-    public String deleteSubTask(Integer taskId, Integer userId, Integer subTaskId)throws CommonException {
+    public String deleteSubTask(Integer taskId, Integer userId, Integer subTaskId,String orgRef)throws CommonException {
+        validation.orgRefValidation(orgRef);
         if(validation.taskUserValidation(userId)){
             TaskEntity taskEntity = validation.subTaskExistValidationByUserIdAndTaskIdAndId(taskId,userId,subTaskId);
             taskEntity.setActiveStatus(ActiveStatus.INACTIVE);
@@ -161,7 +167,8 @@ public class SubTaskImpl implements SubTaskService {
     }
 
     @Override
-    public List<TaskHistoryDTO> viewHistorySubTask(Integer taskId, Integer subTaskId, Integer userId) throws CommonException {
+    public List<TaskHistoryDTO> viewHistorySubTask(Integer taskId, Integer subTaskId, Integer userId,String orgRef) throws CommonException {
+        validation.orgRefValidation(orgRef);
         List<TaskHistoryDTO> taskHistoryDTOList = new ArrayList<>();
         if (validation.taskHistoryUserValidation(userId) && validation.taskHistoryValidation(taskId)) {
             if (validation.subTaskHistoryValidation(subTaskId)) {

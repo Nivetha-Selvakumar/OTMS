@@ -8,9 +8,9 @@ import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Enum.TaskIds;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskCreationException;
-import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
 import com.onlinetaskmanagementsystem.otms.Exception.UserNotFoundException;
 import com.onlinetaskmanagementsystem.otms.Utils.AppConstant;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
@@ -54,7 +54,7 @@ public class TaskImpl implements TaskService {
 
 
     @Override
-    public Integer addTask(Integer userId, TaskDTO taskDTO) throws CommonException {
+    public Integer addTask(Integer userId, TaskDTO taskDTO, String orgRef) throws CommonException {
         //validate user and get user entity
         //optional entity is present okay else throw
         //Then Validate User, Task Title and Task Status same is present okay else throw
@@ -65,7 +65,7 @@ public class TaskImpl implements TaskService {
 
         ids.put(TaskIds.ASSIGNEEID.toString(), taskDTO.getAssigneeId());
         ids.put(TaskIds.ASSIGNERID.toString(), taskDTO.getAssignerId());
-
+        OrganisationEntity organisationEntity = validation.orgRefValidation(orgRef);
         if(validation.taskUserIdValidation(userId)){
             if(validation.taskUserValidationAndStatus(userId)){
                 if (validation.taskTitleValidation(taskDTO.getTaskTitle())&& validation.taskUserIdAndTaskTitleValidation(userId, taskDTO.getTaskTitle())) {
@@ -74,6 +74,8 @@ public class TaskImpl implements TaskService {
                     //                    Check if all the given user Ids present in the user table or not
 
                     TaskEntity taskEntity = new TaskEntity();
+
+                    taskEntity.setOrgId(organisationEntity);
 
                     taskEntity.setUserId(userRepo.findById(userId).get());
 
@@ -88,7 +90,7 @@ public class TaskImpl implements TaskService {
                     taskEntity.setAssignerId(userEntity);
                     taskEntity = taskMapper.taskModelToEntity(taskDTO,taskEntity);
                     taskEntity = taskRepo.save(taskEntity);
-                    TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, "Created");
+                    TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, organisationEntity, "Created");
                     taskHistoryRepo.save(taskHistoryEntity);
                     return taskEntity.getId();
                 }
@@ -101,8 +103,9 @@ public class TaskImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> viewList(Integer userId, FilterTask filterTask) throws UserNotFoundException {
+    public List<TaskDTO> viewList(Integer userId, FilterTask filterTask, String orgRef) throws CommonException {
 
+        validation.orgRefValidation(orgRef);
         validation.taskViewValidation(userId);
         List<TaskEntity> taskEntities;
         if(!filterTask.getEmpFilterType().equals(AppConstant.ALL)) {
@@ -127,11 +130,12 @@ public class TaskImpl implements TaskService {
     }
 
     @Override
-    public TaskDTO viewUpdatedTask(Integer taskId, Integer userId, TaskUpdateDTO taskUpdateDTO) throws CommonException {
+    public TaskDTO viewUpdatedTask(Integer taskId, Integer userId, TaskUpdateDTO taskUpdateDTO,String orgRef) throws CommonException {
         Map<String, Integer> ids = new HashMap<>();
 
         ids.put(TaskIds.ASSIGNEEID.toString(), taskUpdateDTO.getAssigneeId());
         ids.put(TaskIds.ASSIGNERID.toString(), taskUpdateDTO.getAssignerId());
+        OrganisationEntity organisationEntity = validation.orgRefValidation(orgRef);
         TaskEntity taskEntity = validation.taskExistValidation(taskId);
         UserEntity userEntity = userRepo.findById(userId).orElseThrow(()->new UserNotFoundException("User not found with id"));
         taskEntity.setUpdatedBy(userEntity);
@@ -142,13 +146,14 @@ public class TaskImpl implements TaskService {
         userEntity = userRepo.findById(taskUpdateDTO.getAssignerId()).orElse(validation.validatedUserIds(ids));
         taskEntity.setAssignerId(userEntity);
         taskEntity=taskRepo.save(taskMapper.taskUpdateModelToEntity(taskUpdateDTO,taskEntity));
-        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, taskUpdateDTO.getUpdatedField());
+        TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, organisationEntity, taskUpdateDTO.getUpdatedField());
         taskHistoryRepo.save(taskHistoryEntity);
         return taskMapper.taskEntityToModel(taskEntity);
     }
 
     @Override
-    public String deleteTask(Integer taskId, Integer userId) throws TaskNotFoundException {
+    public String deleteTask(Integer taskId, Integer userId,String orgRef) throws CommonException {
+        validation.orgRefValidation(orgRef);
         if(validation.taskUserValidation(userId)){
             TaskEntity taskEntity = validation.taskExistValidationByUserIdAndTaskId(taskId, userId);
             taskEntity.setActiveStatus(ActiveStatus.INACTIVE);
@@ -159,7 +164,8 @@ public class TaskImpl implements TaskService {
     }
 
     @Override
-    public List<TaskHistoryDTO> viewHistoryTask(Integer taskId,Integer userId) throws CommonException {
+    public List<TaskHistoryDTO> viewHistoryTask(Integer taskId,Integer userId,String orgRef) throws CommonException {
+        validation.orgRefValidation(orgRef);
         List<TaskHistoryDTO> taskHistoryDTOList = new ArrayList<>();
         if (validation.taskHistoryUserValidation(userId)) {
             if (validation.taskHistoryValidation(taskId)) {

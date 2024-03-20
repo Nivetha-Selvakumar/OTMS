@@ -21,6 +21,10 @@ public class TaskHistoryEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id", referencedColumnName = "Id", nullable = false)
+    private OrganisationEntity orgId;
+
     @ManyToOne
     @JoinColumn(name = "task_id",nullable = false)
     private TaskEntity taskId;

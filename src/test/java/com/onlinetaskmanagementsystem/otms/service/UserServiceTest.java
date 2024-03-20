@@ -5,6 +5,8 @@ import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
+import com.onlinetaskmanagementsystem.otms.entity.RoleEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.mapper.UserMapper;
 import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
@@ -40,8 +42,14 @@ class UserServiceTest {
 
     SignInDTO signInDTO = new SignInDTO();
 
+    OrganisationEntity organisationEntity = new OrganisationEntity();
+
+    RoleEntity roleEntity = new RoleEntity();
     @BeforeEach
     void init(){
+
+        organisationEntity.setOrgRef("ORG001");
+
 //        userDTO.setOrgId(1);
 //        userDTO.setRoleId(1);
         userDTO.setEmpCode("111");
@@ -51,6 +59,7 @@ class UserServiceTest {
         userDTO.setPassword("nivetha");
         userDTO.setRegistrationDate(Timestamp.valueOf("2024-02-02 12:30:40"));
         userDTO.setUserStatus(ActiveStatus.valueOf("ACTIVE"));
+        userDTO.setRoleId(1);
 
 
         userEntity.setId(1);
@@ -68,11 +77,12 @@ class UserServiceTest {
     }
 
     @Test
-    void addUserTest1() {
-        when(userMapper.userModelToEntity(userDTO)).thenReturn(userEntity);
+    void addUserTest1() throws CommonException {
+        when(validation.orgRefValidation(organisationEntity.getOrgRef())).thenReturn(organisationEntity);
+//        when(userMapper.userModelToEntity(userDTO, organisationEntity, roleEntity)).thenReturn(userEntity);
         when(validation.checkExistEmail(userDTO.getEmail())).thenReturn(true);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            userImpl.addUser(userDTO);
+            userImpl.addUser(userDTO, "ORG001");
         });
         String expectedMessage = "User already exist. Try with other email !";
         String actualMessage=commonException.getMessage();
@@ -81,19 +91,11 @@ class UserServiceTest {
 
     @Test
     void addUserTest2() throws CommonException{
-        when(userMapper.userModelToEntity(userDTO)).thenReturn(userEntity);
-        when(validation.checkExistUser(userDTO.getUsername())).thenReturn(Boolean.valueOf("User already exist. Try with other username !"));
-        when(userRepo.save(userEntity)).thenReturn(userEntity);
-        SignUpResponse id1 = userImpl.addUser(userDTO);
-        Assertions.assertNull(id1);
-    }
-
-    @Test
-    void  addUserTest3(){
-        when(userMapper.userModelToEntity(userDTO)).thenReturn(userEntity);
+        when(validation.orgRefValidation(organisationEntity.getOrgRef())).thenReturn(organisationEntity);
+//        when(userMapper.userModelToEntity(userDTO, organisationEntity,roleEntity)).thenReturn(userEntity);
         when(validation.checkExistUser(userDTO.getUsername())).thenReturn(true);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            userImpl.addUser(userDTO);
+            userImpl.addUser(userDTO, "ORG001");
         });
         String expectedMessage = "User already exist. Try with other username !";
         String actualMessage=commonException.getMessage();
@@ -101,11 +103,25 @@ class UserServiceTest {
     }
 
     @Test
+    void  addUserTest3() throws CommonException {
+        when(validation.orgRefValidation(organisationEntity.getOrgRef())).thenReturn(organisationEntity);
+        when(validation.checkExistUser(userDTO.getUsername())).thenReturn(false);
+        when(validation.checkExistUser(userDTO.getUsername())).thenReturn(false);
+        when(validation.userRoleValidation(userDTO.getRoleId())).thenReturn(roleEntity);
+        when(userMapper.userModelToEntity(userDTO, organisationEntity,roleEntity)).thenReturn(userEntity);
+        when(userRepo.save(userEntity)).thenReturn(userEntity);
+        SignUpResponse id1 = userImpl.addUser(userDTO , "ORG001");
+        Assertions.assertNull(id1);
+    }
+
+    @Test
     void signInUserTest1() throws CommonException{
+        when(validation.orgRefValidation(organisationEntity.getOrgRef())).thenReturn(organisationEntity);
         when(validation.checkExistEmail(signInDTO.getEmail())).thenReturn(true);
-        when(userRepo.getUserRecord(signInDTO.getEmail())).thenReturn(userEntity);
+        when(validation.checkPassword(signInDTO.getEmail(), signInDTO.getPassword())).thenReturn(true);
+        when(userRepo.findByEmailAndPasswordAndOrgId(signInDTO.getEmail(), signInDTO.getPassword(),organisationEntity)).thenReturn(userEntity);
         when(userMapper.userEntityToModel(userEntity)).thenReturn(userDTO);
-        UserDTO userDTOResponse = userImpl.signInUser(signInDTO);
+        UserDTO userDTOResponse = userImpl.signInUser(signInDTO, "ORG001");
         Assertions.assertEquals(userDTO.getEmail(),userDTOResponse.getEmail());
     }
 
@@ -114,9 +130,9 @@ class UserServiceTest {
         signInDTO.setEmail("n@gmail.com");
         signInDTO.setPassword("Niv");
         when(validation.checkExistEmail(signInDTO.getEmail())).thenReturn(true);
-        when(userRepo.getUserRecord(signInDTO.getEmail())).thenReturn(userEntity);
+        when(validation.checkPassword(signInDTO.getEmail(), signInDTO.getPassword())).thenReturn(false);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            userImpl.signInUser(signInDTO);
+            userImpl.signInUser(signInDTO, "ORG001");
         });
         String response = commonException.getMessage();
         Assertions.assertEquals("Password Mismatched",response);
@@ -126,7 +142,7 @@ class UserServiceTest {
     void signInUserTest3(){
         when(validation.checkExistEmail(signInDTO.getEmail())).thenReturn(false);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            userImpl.signInUser(signInDTO);
+            userImpl.signInUser(signInDTO, "ORG001");
         });
         String response = commonException.getMessage();
         Assertions.assertEquals("Given email not exists",response);

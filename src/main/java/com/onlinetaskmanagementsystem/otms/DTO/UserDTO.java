@@ -17,13 +17,14 @@ import java.sql.Timestamp;
 @Component
 public class UserDTO {
 
-
     @NotBlank(message = "Enter your EmployeeCode")
     private String empCode;
 
     @NotBlank(message = "Enter your Name")
     @Pattern(regexp = "^[a-zA-Z0-9_]+$",message = "Special characters not allowed!")
     private String empName;
+
+    private Integer roleId;
 
     @NotBlank(message = "Enter your Username")
     @Pattern(regexp = "^[a-zA-Z0-9_]+$",message = "Special characters not allowed!")

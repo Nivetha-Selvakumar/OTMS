@@ -21,12 +21,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(path = "/signup")
-    public ResponseEntity<SignUpResponse> signupUser(@RequestBody @Valid UserDTO userDTO) throws CommonException {
-        return new ResponseEntity<>(userService.addUser(userDTO), HttpStatus.CREATED);
+    public ResponseEntity<SignUpResponse> signupUser(@RequestBody @Valid UserDTO userDTO,@RequestHeader String orgRef) throws CommonException {
+        return new ResponseEntity<>(userService.addUser(userDTO,orgRef), HttpStatus.CREATED);
     }
 
     @PostMapping(path="/signin")
-    public ResponseEntity<UserDTO> signinUser(@RequestBody @Valid SignInDTO signInDTO) throws CommonException{
-        return new ResponseEntity<>(userService.signInUser(signInDTO), HttpStatus.OK);
+    public ResponseEntity<UserDTO> signinUser(@RequestBody @Valid SignInDTO signInDTO,@RequestHeader String orgRef) throws CommonException{
+        return new ResponseEntity<>(userService.signInUser(signInDTO, orgRef), HttpStatus.OK);
     }
 }

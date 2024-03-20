@@ -1,5 +1,6 @@
 package com.onlinetaskmanagementsystem.otms.validation;
 
+import com.onlinetaskmanagementsystem.otms.DTO.RoleDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
@@ -7,18 +8,15 @@ import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Enum.TaskIds;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
 import com.onlinetaskmanagementsystem.otms.Exception.TaskNotFoundException;
-import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
-import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
-import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
-import com.onlinetaskmanagementsystem.otms.repository.TaskHistoryRepo;
-import com.onlinetaskmanagementsystem.otms.repository.TaskRepo;
-import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
+import com.onlinetaskmanagementsystem.otms.entity.*;
+import com.onlinetaskmanagementsystem.otms.repository.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
@@ -38,6 +36,12 @@ class ValidationTest {
     TaskRepo taskRepo;
 
     @Mock
+    OrganisationRepo organisationRepo;
+
+    @Mock
+    RoleRepo roleRepo;
+
+    @Mock
     TaskHistoryRepo taskHistoryRepo;
 
     UserDTO userDTO= new UserDTO();
@@ -53,6 +57,13 @@ class ValidationTest {
 
     List<TaskHistoryEntity> taskHistoryEntityList = new ArrayList<>();
     TaskHistoryEntity taskHistoryEntity = new TaskHistoryEntity();
+
+    OrganisationEntity organisationEntity = new OrganisationEntity();
+
+    RoleEntity roleEntity= new RoleEntity();
+
+    RoleDTO roleDTO = new RoleDTO();
+
 
     @BeforeEach
     void  init(){
@@ -71,19 +82,22 @@ class ValidationTest {
         taskHistoryDTO.setTaskId(1);
         taskHistoryEntity.setTaskId(taskEntity);
         taskHistoryEntityList.add(taskHistoryEntity);
+        roleEntity.setId(1);
+        roleEntity.setRole("EMPLOYEE");
+        roleDTO.setRole("EMPLOYEE");
 
     }
 
     @Test
     void checkExistEmailValidationTest(){
-        when(userRepo.checkUser(userDTO.getEmail())).thenReturn(1);
+        when(userRepo.findByEmail(userDTO.getEmail())).thenReturn(Optional.of(userEntity));
         boolean result = validation.checkExistEmail(userDTO.getEmail());
         Assertions.assertTrue(result);
     }
 
     @Test
     void checkExistUserValidationTest(){
-        when(userRepo.checkUserName(userDTO.getUsername())).thenReturn(String.valueOf(true));
+        when(userRepo.findByUsername(userDTO.getUsername())).thenReturn(Optional.of(userEntity));
         boolean result= validation.checkExistUser(userDTO.getUsername());
         Assertions.assertTrue(result);
     }
@@ -323,6 +337,50 @@ class ValidationTest {
         taskEntity.setChildCount(3);
         when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.of(taskEntity));
         validation.subTaskReductionChildCount(taskHistoryDTO.getTaskId());
+    }
+
+    @Test
+    void orgRefValidationTest1(){
+        when(organisationRepo.findByOrgRef(Mockito.any())).thenReturn(Optional.empty());
+        assertThrows(CommonException.class,() -> {
+            validation.orgRefValidation(Mockito.any());
+        });
+    }
+
+    @Test
+    void orgRefValidationTest2() throws CommonException {
+        when(organisationRepo.findByOrgRef(Mockito.any())).thenReturn(Optional.of(organisationEntity));
+        OrganisationEntity actual = validation.orgRefValidation(Mockito.any());
+        assertEquals(organisationEntity,actual);
+    }
+
+    @Test
+    void userRoleValidationTest1() throws CommonException {
+        when(roleRepo.findByIdAndActiveStatus(roleEntity.getId(),ActiveStatus.ACTIVE)).thenReturn(Optional.of(roleEntity));
+        assertEquals(roleEntity,validation.userRoleValidation(roleEntity.getId()));
+    }
+    @Test
+    void userRoleValidationTest2(){
+        when(roleRepo.findByIdAndActiveStatus(roleEntity.getId(),ActiveStatus.ACTIVE)).thenReturn(Optional.empty());
+        assertThrows(CommonException.class,() -> {
+            validation.userRoleValidation(roleEntity.getId());
+        });
+    }
+
+    @Test
+    void userRoleValidationTest3() throws CommonException {
+        roleEntity.setId(null);
+        when(roleRepo.findByRoleAndActiveStatus(roleEntity.getRole(), ActiveStatus.ACTIVE)).thenReturn(Optional.of(roleEntity));
+        assertEquals(roleEntity,validation.userRoleValidation(null));
+    }
+
+    @Test
+    void userRoleValidationTest4(){
+        roleEntity.setId(null);
+        when(roleRepo.findByRoleAndActiveStatus(roleEntity.getRole(), ActiveStatus.ACTIVE)).thenReturn(Optional.empty());
+        assertThrows(CommonException.class,() -> {
+            validation.userRoleValidation(roleEntity.getId());
+        });
     }
 
 

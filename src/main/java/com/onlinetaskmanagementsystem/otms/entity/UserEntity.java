@@ -25,6 +25,14 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id", referencedColumnName = "Id", nullable = false)
+    private OrganisationEntity orgId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id" , referencedColumnName = "Id", nullable = false)
+    private RoleEntity roleId;
+
     @Column(name = "emp_code", nullable = false, length = 50 )
     private String empCode;
 

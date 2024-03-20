@@ -21,31 +21,31 @@ public class SubTaskController {
     SubTaskService subTaskService;
 
     @GetMapping(path="/list/{taskId}")
-    public ResponseEntity<List<TaskDTO>> listSubTask(@PathVariable("taskId") Integer taskId, @RequestParam Integer userId) throws CommonException {
-        return new ResponseEntity<>(subTaskService.viewSubList(taskId,userId), HttpStatus.OK);
+    public ResponseEntity<List<TaskDTO>> listSubTask(@PathVariable("taskId") Integer taskId, @RequestParam Integer userId, @RequestHeader String orgRef) throws CommonException {
+        return new ResponseEntity<>(subTaskService.viewSubList(taskId,userId,orgRef), HttpStatus.OK);
     }
 
     @PostMapping(path="/create/{taskId}")
-    public ResponseEntity<String> createSubTask(@PathVariable("taskId") Integer taskId, @RequestBody @Valid TaskDTO taskDTO)throws CommonException {
-        Integer id= subTaskService.addSubTask(taskDTO,taskId);
+    public ResponseEntity<String> createSubTask(@PathVariable("taskId") Integer taskId, @RequestBody @Valid TaskDTO taskDTO, @RequestHeader String orgRef)throws CommonException {
+        Integer id= subTaskService.addSubTask(taskDTO,taskId,orgRef);
         String responseMsg="Successfully Registered!\nYour SubTaskId: "+id;
         return new ResponseEntity<>(responseMsg, HttpStatus.CREATED);
     }
 
     @PutMapping(path="/update/{taskId}/{subTaskId}")
-    public ResponseEntity<TaskDTO> updateSubTask(@PathVariable("taskId") Integer taskId, @PathVariable("subTaskId") Integer subTaskId, @RequestBody @Valid TaskUpdateDTO taskUpdateDTO) throws  CommonException{
-        return new ResponseEntity<>(subTaskService.viewUpdatedSubTask(taskId, subTaskId, taskUpdateDTO),HttpStatus.OK);
+    public ResponseEntity<TaskDTO> updateSubTask(@PathVariable("taskId") Integer taskId, @PathVariable("subTaskId") Integer subTaskId, @RequestBody @Valid TaskUpdateDTO taskUpdateDTO, @RequestHeader String orgRef) throws  CommonException{
+        return new ResponseEntity<>(subTaskService.viewUpdatedSubTask(taskId, subTaskId, taskUpdateDTO,orgRef),HttpStatus.OK);
     }
 
     @DeleteMapping(path="/delete/{taskId}/{subTaskId}")
-    public ResponseEntity<String> deleteSubTask(@PathVariable("taskId") Integer taskId,@PathVariable("subTaskId") Integer subTaskId, @RequestParam Integer userId) throws CommonException {
-        return  new ResponseEntity<>(subTaskService.deleteSubTask(taskId,userId,subTaskId),HttpStatus.OK);
+    public ResponseEntity<String> deleteSubTask(@PathVariable("taskId") Integer taskId,@PathVariable("subTaskId") Integer subTaskId, @RequestParam Integer userId, @RequestHeader String orgRef) throws CommonException {
+        return  new ResponseEntity<>(subTaskService.deleteSubTask(taskId,userId,subTaskId,orgRef),HttpStatus.OK);
     }
 
 
     @GetMapping(path="/history/{taskId}/{subTaskId}")
-    public ResponseEntity<List<TaskHistoryDTO>> historySubTask(@PathVariable Integer taskId, @PathVariable("subTaskId") Integer subTaskId,@RequestParam Integer userId) throws CommonException{
-        return new ResponseEntity<>(subTaskService.viewHistorySubTask(taskId,subTaskId,userId),HttpStatus.OK);
+    public ResponseEntity<List<TaskHistoryDTO>> historySubTask(@PathVariable Integer taskId, @PathVariable("subTaskId") Integer subTaskId,@RequestParam Integer userId,@RequestHeader String orgRef) throws CommonException{
+        return new ResponseEntity<>(subTaskService.viewHistorySubTask(taskId,subTaskId,userId,orgRef),HttpStatus.OK);
 
     }
 }

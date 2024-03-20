@@ -2,17 +2,17 @@ package com.onlinetaskmanagementsystem.otms.mapper;
 
 import com.onlinetaskmanagementsystem.otms.Response.SignUpResponse;
 import com.onlinetaskmanagementsystem.otms.DTO.UserDTO;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
+import com.onlinetaskmanagementsystem.otms.entity.RoleEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
 import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
-import com.onlinetaskmanagementsystem.otms.repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    @Autowired
-    UserRepo userRepo;
-    public UserEntity userModelToEntity(UserDTO userDTO){
+
+
+    public UserEntity userModelToEntity(UserDTO userDTO, OrganisationEntity organisationEntity, RoleEntity roleEntity){
         UserEntity userEntity = new UserEntity();
         userEntity.setEmpCode(userDTO.getEmpCode());
         userEntity.setEmpName(userDTO.getEmpName());
@@ -21,9 +21,9 @@ public class UserMapper {
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setRegistrationDate(userDTO.getRegistrationDate());
         userEntity.setUserStatus(ActiveStatus.ACTIVE);
-
+        userEntity.setOrgId(organisationEntity);
+        userEntity.setRoleId(roleEntity);
         return userEntity;
-
     }
 
     public UserDTO userEntityToModel(UserEntity userEntity){

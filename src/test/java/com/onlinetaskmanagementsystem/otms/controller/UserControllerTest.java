@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
@@ -35,16 +36,16 @@ class UserControllerTest {
 
     @Test
     void signupUserTest() throws CommonException {
-        when(userService.addUser(userDTO)).thenReturn(signUpResponse);
-        ResponseEntity<SignUpResponse> response = userController.signupUser(userDTO);
+        when(userService.addUser(userDTO, "ORG001")).thenReturn(signUpResponse);
+        ResponseEntity<SignUpResponse> response = userController.signupUser(userDTO,"ORG001");
         Assertions.assertEquals(signUpResponse, response.getBody());
     }
 
     @Test
     void  signinUserTest() throws  CommonException{
         userDTO.setUsername("Nive");
-        when(userService.signInUser(signInDTO)).thenReturn(userDTO);
-        ResponseEntity<UserDTO> response=userController.signinUser(signInDTO);
+        when(userService.signInUser(signInDTO, "ORG001")).thenReturn(userDTO);
+        ResponseEntity<UserDTO> response=userController.signinUser(signInDTO,"ORG001");
         Assertions.assertEquals(userDTO.getUsername(), Objects.requireNonNull(response.getBody()).getUsername());
     }
 

@@ -13,11 +13,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ControllerAdvice {
-    static final String EXCEPTION = "Exception";
-
-    static final String ERRMESSAGE = "Error Message";
-
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String,String> handleInvalidArgument(MethodArgumentNotValidException exception){

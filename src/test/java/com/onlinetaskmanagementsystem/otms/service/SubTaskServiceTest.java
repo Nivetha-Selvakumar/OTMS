@@ -7,6 +7,7 @@ import com.onlinetaskmanagementsystem.otms.Enum.ActiveStatus;
 import com.onlinetaskmanagementsystem.otms.Enum.Priority;
 import com.onlinetaskmanagementsystem.otms.Enum.TaskStatus;
 import com.onlinetaskmanagementsystem.otms.Exception.CommonException;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import com.onlinetaskmanagementsystem.otms.entity.UserEntity;
@@ -74,9 +75,10 @@ class SubTaskServiceTest {
 
     TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
 
-    List<TaskHistoryDTO> taskHistoryDTOList = new ArrayList<>();
 
     TaskHistoryEntity taskHistoryEntity = new TaskHistoryEntity();
+
+    OrganisationEntity organisationEntity = new OrganisationEntity();
 
     @BeforeEach
     void init(){
@@ -132,7 +134,7 @@ class SubTaskServiceTest {
         when(taskRepo.findById(taskEntity.getId())).thenReturn(Optional.of(taskEntity));
         when(taskRepo.findAllByUserIdAndParentTaskIdAndActiveStatus(userEntity,taskEntity,ActiveStatus.ACTIVE)).thenReturn(taskEntityList);
         when(subTaskMapper.subTaskEntityToModel(Mockito.any())).thenReturn(taskDTO);
-        List<TaskDTO> actual = subTaskImpl.viewSubList(taskEntity.getId(),taskDTO.getUserId());
+        List<TaskDTO> actual = subTaskImpl.viewSubList(taskEntity.getId(),taskDTO.getUserId(),"ORG001");
         assertEquals(taskEntityList.size(), actual.size());
 
     }
@@ -145,7 +147,7 @@ class SubTaskServiceTest {
         when(validation.taskTitleValidation(taskDTO.getTaskTitle())).thenReturn(true);
         when(validation.taskUserIdAndTaskTitleValidation(taskDTO.getUserId(),taskDTO.getTaskTitle())).thenReturn(true);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            subTaskImpl.addSubTask(taskDTO,taskEntity.getId());
+            subTaskImpl.addSubTask(taskDTO,taskEntity.getId(),"ORG001");
         });
         String expectedMessage = "This task is already present for this user";
         String actualMessage=commonException.getMessage();
@@ -153,10 +155,11 @@ class SubTaskServiceTest {
     }
 
     @Test
-    void addSubTaskTest2() {
+    void addSubTaskTest2() throws CommonException {
+        when(validation.orgRefValidation("ORG001")).thenReturn(organisationEntity);
         when(validation.taskUserIdValidation(taskDTO.getUserId())).thenReturn(false);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            subTaskImpl.addSubTask(taskDTO,taskEntity.getId());
+            subTaskImpl.addSubTask(taskDTO,taskEntity.getId(),"ORG001");
         });
         String expectedMessage = "No User is Found";
         String actualMessage=commonException.getMessage();
@@ -164,11 +167,12 @@ class SubTaskServiceTest {
     }
 
     @Test
-    void addSubTaskTest3(){
+    void addSubTaskTest3() throws CommonException {
+        when(validation.orgRefValidation("ORG001")).thenReturn(organisationEntity);
         when(validation.taskUserIdValidation(taskDTO.getUserId())).thenReturn(true);
         when(validation.taskUserValidationAndStatus(taskDTO.getUserId())).thenReturn(false);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            subTaskImpl.addSubTask(taskDTO,taskEntity.getId());
+            subTaskImpl.addSubTask(taskDTO,taskEntity.getId(),"ORG001");
         });
         String expectedMessage = "User is not active";
         String actualMessage=commonException.getMessage();
@@ -177,11 +181,12 @@ class SubTaskServiceTest {
 //
     @Test
     void addSubTaskTest4() throws CommonException {
+        when(validation.orgRefValidation("ORG001")).thenReturn(organisationEntity);
         when(validation.taskUserIdValidation(taskDTO.getUserId())).thenReturn(true);
         when(validation.taskUserValidationAndStatus(taskDTO.getUserId())).thenReturn(true);
         when(validation.taskTaskIdAndUserValidationAndStatus(taskEntity.getId(),taskDTO.getUserId())).thenReturn(false);
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            subTaskImpl.addSubTask(taskDTO,taskEntity.getId());
+            subTaskImpl.addSubTask(taskDTO,taskEntity.getId(),"ORG001");
         });
         String expectedMessage = "Task not found or inactive task";
         String actualMessage=commonException.getMessage();
@@ -190,6 +195,7 @@ class SubTaskServiceTest {
     }
     @Test
     void addSubTaskTest5() throws CommonException {
+        when(validation.orgRefValidation("ORG001")).thenReturn(organisationEntity);
         when(validation.taskUserIdValidation(taskDTO.getUserId())).thenReturn(true);
         when(validation.taskUserValidationAndStatus(taskDTO.getUserId())).thenReturn(true);
         when(validation.taskTaskIdAndUserValidationAndStatus(taskEntity.getId(),taskDTO.getUserId())).thenReturn(true);
@@ -204,14 +210,15 @@ class SubTaskServiceTest {
         when(userRepo.findById(taskDTO.getUserId())).thenReturn(Optional.of(userEntity1));
         when(subTaskMapper.subTaskModelToEntity(Mockito.any(),Mockito.any())).thenReturn(taskEntity);
         when(taskRepo.save(taskEntity)).thenReturn(taskEntity);
-        when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity,"Created")).thenReturn(new TaskHistoryEntity());
-        Integer response = subTaskImpl.addSubTask(taskDTO,taskEntity.getId());
+        when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity,organisationEntity,"Created")).thenReturn(new TaskHistoryEntity());
+        Integer response = subTaskImpl.addSubTask(taskDTO,taskEntity.getId(),"ORG001");
         assertEquals(taskEntity.getId(),response);
 
     }
 
     @Test
     void addSubTaskTest6() throws CommonException {
+        when(validation.orgRefValidation("ORG001")).thenReturn(organisationEntity);
         when(validation.taskUserIdValidation(taskDTO.getUserId())).thenReturn(true);
         when(validation.taskUserValidationAndStatus(taskDTO.getUserId())).thenReturn(true);
         when(validation.taskTaskIdAndUserValidationAndStatus(taskEntity.getId(),taskDTO.getUserId())).thenReturn(true);
@@ -225,17 +232,18 @@ class SubTaskServiceTest {
         when(userRepo.findById(taskDTO.getUserId())).thenReturn(Optional.of(userEntity1));
         when(subTaskMapper.subTaskModelToEntity(Mockito.any(),Mockito.any())).thenReturn(taskEntity);
         when(taskRepo.save(taskEntity)).thenReturn(taskEntity);
-        when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity,"Created")).thenReturn(new TaskHistoryEntity());
-        Integer response = subTaskImpl.addSubTask(taskDTO,taskEntity.getId());
+        when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity,organisationEntity,"Created")).thenReturn(new TaskHistoryEntity());
+        Integer response = subTaskImpl.addSubTask(taskDTO,taskEntity.getId(),"ORG001");
         assertEquals(taskEntity.getId(),response);
     }
     @Test
     void viewUpdateTask1() throws CommonException{
+        when(validation.orgRefValidation("ORG001")).thenReturn(organisationEntity);
         when(validation.subTaskExistValidation(taskDTO.getParentTaskId(), taskEntity.getId())).thenReturn(taskEntity);
         when(userRepo.findById(taskUpdateDTO.getUserId())).thenReturn(Optional.of(userEntity));
         when(taskRepo.save(subTaskMapper.subTaskUpdateModelToEntity(taskUpdateDTO,taskEntity))).thenReturn(taskEntity);
-        when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity, taskUpdateDTO.getUpdatedField())).thenReturn(taskHistoryEntity);
-        TaskDTO actual = subTaskImpl.viewUpdatedSubTask(taskDTO.getParentTaskId(), taskEntity.getId(), taskUpdateDTO);
+        when(taskHistoryMapper.taskHistoryModelToEntity(taskEntity,organisationEntity, taskUpdateDTO.getUpdatedField())).thenReturn(taskHistoryEntity);
+        TaskDTO actual = subTaskImpl.viewUpdatedSubTask(taskDTO.getParentTaskId(), taskEntity.getId(), taskUpdateDTO,"ORG001");
         Assertions.assertEquals(subTaskMapper.subTaskEntityToModel(taskEntity),actual);
     }
 
@@ -243,7 +251,7 @@ class SubTaskServiceTest {
     void deleteSubTask1() throws CommonException {
         when(validation.taskUserValidation(userEntity.getId())).thenReturn(false);
         String expected = "No Active task is for particular User";
-        String actual = subTaskImpl.deleteSubTask(taskDTO.getParentTaskId(), userEntity.getId(),taskEntity.getId());
+        String actual = subTaskImpl.deleteSubTask(taskDTO.getParentTaskId(), userEntity.getId(),taskEntity.getId(),"ORG001");
         assertEquals(expected,actual);
     }
 
@@ -252,7 +260,7 @@ class SubTaskServiceTest {
         when(validation.taskUserValidation(userEntity.getId())).thenReturn(true);
         when(validation.subTaskExistValidationByUserIdAndTaskIdAndId(taskDTO.getParentTaskId(), userEntity.getId(), taskEntity.getId())).thenReturn(taskEntity);
         String expected = "Successfully Inactive!";
-        String actual = subTaskImpl.deleteSubTask(taskDTO.getParentTaskId(), userEntity.getId(),taskEntity.getId());
+        String actual = subTaskImpl.deleteSubTask(taskDTO.getParentTaskId(), userEntity.getId(),taskEntity.getId(),"ORG001");
         assertEquals(expected,actual);
     }
 
@@ -264,7 +272,7 @@ class SubTaskServiceTest {
         when(taskHistoryRepo.findAllByTaskId(taskEntity)).thenReturn(taskHistoryEntityList);
         when(taskHistoryMapper.taskHistoryEntityToModel(taskHistoryEntity)).thenReturn(taskHistoryDTO);
         when(taskRepo.findById(taskHistoryDTO.getTaskId())).thenReturn(Optional.ofNullable(taskEntity));
-        List<TaskHistoryDTO> actual = subTaskImpl.viewHistorySubTask(taskDTO.getParentTaskId(), userEntity.getId(), taskEntity.getId());
+        List<TaskHistoryDTO> actual = subTaskImpl.viewHistorySubTask(taskDTO.getParentTaskId(), userEntity.getId(), taskEntity.getId(),"ORG001");
         Assertions.assertEquals(taskHistoryEntityList.size(),actual.size());
     }
 
@@ -274,7 +282,7 @@ class SubTaskServiceTest {
         when(validation.taskHistoryValidation(Mockito.anyInt())).thenReturn(false);
         String expected = "The user is not found";
         CommonException commonException=assertThrows(CommonException.class,() -> {
-            subTaskImpl.viewHistorySubTask(taskDTO.getParentTaskId(),taskEntity.getId(),taskDTO.getUserId());
+            subTaskImpl.viewHistorySubTask(taskDTO.getParentTaskId(),taskEntity.getId(),taskDTO.getUserId(),"ORG001");
         });
         String actual = commonException.getMessage();
         assertEquals(expected,actual);

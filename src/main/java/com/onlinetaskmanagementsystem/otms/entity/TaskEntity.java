@@ -19,12 +19,16 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name="tbl_task")
+@Table(name = "tbl_task")
 public class TaskEntity {
     @Id
     @Column(name = "id", nullable=false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id", referencedColumnName = "Id", nullable = false)
+    private OrganisationEntity orgId;
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)

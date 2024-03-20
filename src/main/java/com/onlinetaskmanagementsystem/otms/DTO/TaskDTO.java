@@ -26,7 +26,6 @@ public class TaskDTO {
     @NotBlank(message = "Enter Task description")
     private String taskDesc;
 
-
     private Priority priority;
 
     private TaskStatus taskStatus;

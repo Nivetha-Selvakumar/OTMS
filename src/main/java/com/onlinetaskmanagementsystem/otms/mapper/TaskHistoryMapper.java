@@ -1,14 +1,16 @@
 package com.onlinetaskmanagementsystem.otms.mapper;
 
 import com.onlinetaskmanagementsystem.otms.DTO.TaskHistoryDTO;
+import com.onlinetaskmanagementsystem.otms.entity.OrganisationEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskEntity;
 import com.onlinetaskmanagementsystem.otms.entity.TaskHistoryEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TaskHistoryMapper {
-    public TaskHistoryEntity taskHistoryModelToEntity(TaskEntity taskEntity, String desc){
+    public TaskHistoryEntity taskHistoryModelToEntity(TaskEntity taskEntity,OrganisationEntity organisationEntity,  String desc){
         TaskHistoryEntity taskHistoryEntity= new TaskHistoryEntity();
+        taskHistoryEntity.setOrgId(organisationEntity);
         taskHistoryEntity.setTaskId(taskEntity);
         taskHistoryEntity.setCreatedDate(taskEntity.getCreatedDate());
         taskHistoryEntity.setDescription(desc);
