@@ -17,6 +17,8 @@ import java.sql.Timestamp;
 @Component
 public class UserDTO {
 
+    private Integer id;
+
     @NotBlank(message = "Enter your EmployeeCode")
     private String empCode;
 
