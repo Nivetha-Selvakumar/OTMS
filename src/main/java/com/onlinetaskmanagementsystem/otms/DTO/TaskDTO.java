@@ -18,6 +18,8 @@ import java.sql.Timestamp;
 @Component
 public class TaskDTO {
 
+    private  Integer id;
+
     private Integer userId;
 
     @NotBlank(message = "Enter Task title")

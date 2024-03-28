@@ -88,6 +88,7 @@ public class TaskImpl implements TaskService {
 
                     userEntity = userRepo.findById(taskDTO.getAssignerId()).orElse(validation.validatedUserIds(ids));
                     taskEntity.setAssignerId(userEntity);
+
                     taskEntity = taskMapper.taskModelToEntity(taskDTO,taskEntity);
                     taskEntity = taskRepo.save(taskEntity);
                     TaskHistoryEntity taskHistoryEntity = taskHistoryMapper.taskHistoryModelToEntity(taskEntity, organisationEntity, "Created");

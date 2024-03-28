@@ -32,6 +32,7 @@ public class TaskMapper {
 
     public TaskDTO taskEntityToModel(TaskEntity taskEntity) {
         TaskDTO taskDTO=new TaskDTO();
+        taskDTO.setId(taskEntity.getId());
         taskDTO.setUserId(taskEntity.getUserId().getId());
         taskDTO.setTaskTitle(taskEntity.getTaskTitle());
         taskDTO.setTaskDesc(taskEntity.getTaskDesc());
