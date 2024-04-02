@@ -103,6 +103,12 @@ class ValidationTest {
     }
 
     @Test
+    void checkPasswordTest(){
+        when(userRepo.findByEmailAndPassword(userDTO.getEmail(),userDTO.getPassword())).thenReturn(userEntity);
+        boolean result =  validation.checkPassword(userDTO.getEmail(),userDTO.getPassword());
+        Assertions.assertTrue(result);
+    }
+    @Test
     void taskTitleValidationTest(){
         when(taskRepo.findByTaskTitle(taskDTO.getTaskTitle())).thenReturn(Optional.of(taskEntity));
         boolean result= validation.taskTitleValidation(taskDTO.getTaskTitle());

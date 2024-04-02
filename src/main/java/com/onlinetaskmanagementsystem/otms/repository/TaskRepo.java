@@ -20,7 +20,6 @@ public interface TaskRepo extends JpaRepository<TaskEntity,Integer> {
 
     Optional<TaskEntity> findByTaskTitle(String taskTitle);
 
-    List<TaskEntity> findAllByUserId(UserEntity userId);
 
     //Subtask and task
     Optional<TaskEntity> findByIdAndActiveStatus(Integer taskId, ActiveStatus status);

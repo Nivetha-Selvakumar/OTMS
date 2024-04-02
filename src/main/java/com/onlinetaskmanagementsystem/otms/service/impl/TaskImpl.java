@@ -96,7 +96,7 @@ public class TaskImpl implements TaskService {
                     return taskEntity.getId();
                 }
             }else{
-                throw  new UserNotFoundException("User is not active");
+                throw new UserNotFoundException("User is not active");
             }
         }else{
             throw new UserNotFoundException("No User is Found");
